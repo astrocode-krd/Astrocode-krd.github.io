@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,953 +11,953 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --board: #12151A;
-    --board-panel: #1B1F27;
-    --board-panel-2: #232833;
-    --silkscreen: #C7CCD6;
-    --silkscreen-dim: #7C8496;
-    --copper: #B87333;
-    --copper-bright: #D89456;
-    --trace-blue: #4A7A96;
-    --text-main: #E8E6E1;
-    --border: rgba(199,204,214,0.12);
-  }
+  :root {
+    --board: #12151A;
+    --board-panel: #1B1F27;
+    --board-panel-2: #232833;
+    --silkscreen: #C7CCD6;
+    --silkscreen-dim: #7C8496;
+    --copper: #B87333;
+    --copper-bright: #D89456;
+    --trace-blue: #4A7A96;
+    --text-main: #E8E6E1;
+    --border: rgba(199,204,214,0.12);
+  }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; }
 
-  body {
-    background: var(--board);
-    color: var(--text-main);
-    font-family: 'Space Grotesk', sans-serif;
-    line-height: 1.5;
-    overflow-x: hidden;
-  }
+  body {
+    background: var(--board);
+    color: var(--text-main);
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
 
-  .mono {
-    font-family: 'Space Mono', monospace;
-  }
+  .mono {
+    font-family: 'Space Mono', monospace;
+  }
 
-  .eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--copper-bright);
-  }
+  .eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--copper-bright);
+  }
 
-  a { color: inherit; text-decoration: none; }
+  a { color: inherit; text-decoration: none; }
 
-  a:focus-visible,
-  button:focus-visible,
-  .btn:focus-visible,
-  .hamburger:focus-visible {
-    outline: 2px solid var(--copper-bright);
-    outline-offset: 3px;
-    border-radius: 2px;
-  }
+  a:focus-visible,
+  button:focus-visible,
+  .btn:focus-visible,
+  .hamburger:focus-visible {
+    outline: 2px solid var(--copper-bright);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
 
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    #trace-path { transition: none !important; }
-    [data-reveal] {
-      opacity: 1 !important;
-      transform: none !important;
-      transition: none !important;
-    }
-  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    #trace-path { transition: none !important; }
+    [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+  }
 
-  /* ---------- Mobile nav ---------- */
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
-    width: 32px;
-    height: 32px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    z-index: 20;
-  }
-  .hamburger span {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background: var(--silkscreen);
-    transition: transform 0.25s ease, opacity 0.25s ease;
-  }
-  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .hamburger.open span:nth-child(2) { opacity: 0; }
-  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  /* ---------- Mobile nav ---------- */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 32px;
+    height: 32px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 20;
+  }
+  .hamburger span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background: var(--silkscreen);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
-  .mobile-nav {
-    position: fixed;
-    top: 0; right: 0;
-    width: 70vw;
-    max-width: 320px;
-    height: 100vh;
-    background: var(--board-panel);
-    border-left: 1px solid var(--border);
-    z-index: 15;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 28px;
-    padding: 40px;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
-  }
-  .mobile-nav.open { transform: translateX(0); }
-  .mobile-nav a {
-    font-family: 'Space Mono', monospace;
-    font-size: 1rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--silkscreen);
-  }
-  .mobile-nav a:hover { color: var(--copper-bright); }
-  .nav-scrim {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 14;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-  }
-  .nav-scrim.open { opacity: 1; pointer-events: auto; }
+  .mobile-nav {
+    position: fixed;
+    top: 0; right: 0;
+    width: 70vw;
+    max-width: 320px;
+    height: 100vh;
+    background: var(--board-panel);
+    border-left: 1px solid var(--border);
+    z-index: 15;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 28px;
+    padding: 40px;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
+  }
+  .mobile-nav.open { transform: translateX(0); }
+  .mobile-nav a {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--silkscreen);
+  }
+  .mobile-nav a:hover { color: var(--copper-bright); }
+  .nav-scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 14;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .nav-scrim.open { opacity: 1; pointer-events: auto; }
 
-  /* ---------- Background board texture ---------- */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 48px 48px;
-    opacity: 0.35;
-    pointer-events: none;
-    z-index: 0;
-  }
+  /* ---------- Background board texture ---------- */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
 
-  /* ---------- Trace line (signature element) ---------- */
-  #trace-svg {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
-  }
-  #trace-path {
-    stroke: var(--copper);
-    stroke-width: 2;
-    fill: none;
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    vector-effect: non-scaling-stroke;
-  }
+  /* ---------- Trace line (signature element) ---------- */
+  #trace-svg {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+  #trace-path {
+    stroke: var(--copper);
+    stroke-width: 2;
+    fill: none;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    vector-effect: non-scaling-stroke;
+  }
 
-  .node {
-    position: relative;
-    z-index: 2;
-  }
-  .node::before {
-    content: "";
-    position: absolute;
-    left: 50%;
-    top: -10px;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--copper);
-    transform: translateX(-50%);
-    box-shadow: 0 0 12px 2px rgba(184,115,51,0.5);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-  .node.lit::before { opacity: 1; }
+  .node {
+    position: relative;
+    z-index: 2;
+  }
+  .node::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -10px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--copper);
+    transform: translateX(-50%);
+    box-shadow: 0 0 12px 2px rgba(184,115,51,0.5);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .node.lit::before { opacity: 1; }
 
-  /* ---------- Layout ---------- */
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 22px 6vw;
-    background: rgba(18,21,26,0.85);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--border);
-  }
-  .logo {
-    font-family: 'Space Mono', monospace;
-    font-weight: 700;
-    font-size: 1.1rem;
-    letter-spacing: 0.02em;
-  }
-  .logo span { color: var(--copper-bright); }
-  nav { display: flex; gap: 36px; }
-  nav a {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--silkscreen-dim);
-    transition: color 0.2s ease;
-  }
-  nav a:hover { color: var(--copper-bright); }
+  /* ---------- Layout ---------- */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 6vw;
+    background: rgba(18,21,26,0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--border);
+  }
+  .logo {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.02em;
+  }
+  .logo span { color: var(--copper-bright); }
+  nav { display: flex; gap: 36px; }
+  nav a {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--silkscreen-dim);
+    transition: color 0.2s ease;
+  }
+  nav a:hover { color: var(--copper-bright); }
 
-  section {
-    position: relative;
-    z-index: 2;
-    padding: 120px 6vw;
-    max-width: 1180px;
-    margin: 0 auto;
-  }
+  section {
+    position: relative;
+    z-index: 2;
+    padding: 120px 6vw;
+    max-width: 1180px;
+    margin: 0 auto;
+  }
 
-  /* ---------- Hero ---------- */
-  .hero { padding-top: 100px; padding-bottom: 100px; }
-  .hero .eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
-  .hero .eyebrow::before {
-    content: "";
-    width: 8px; height: 8px;
-    background: var(--copper);
-    display: inline-block;
-    box-shadow: 0 0 8px 1px rgba(184,115,51,0.7);
-  }
-  h1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: clamp(2.4rem, 6vw, 4.6rem);
-    line-height: 1.05;
-    max-width: 14ch;
-    letter-spacing: -0.01em;
-  }
-  h1 em {
-    font-style: normal;
-    color: var(--copper-bright);
-  }
-  .hero p.sub {
-    margin-top: 26px;
-    max-width: 52ch;
-    color: var(--silkscreen);
-    font-size: 1.08rem;
-  }
-  .hero-meta {
-    margin-top: 48px;
-    display: flex;
-    gap: 40px;
-    flex-wrap: wrap;
-  }
-  .spec {
-    border-left: 2px solid var(--border);
-    padding-left: 14px;
-  }
-  .spec .label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--copper-bright);
-    font-weight: 700;
-  }
-  .spec .value {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.95rem;
-    color: var(--text-main);
-    margin-top: 6px;
-  }
+  /* ---------- Hero ---------- */
+  .hero { padding-top: 100px; padding-bottom: 100px; }
+  .hero .eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
+  .hero .eyebrow::before {
+    content: "";
+    width: 8px; height: 8px;
+    background: var(--copper);
+    display: inline-block;
+    box-shadow: 0 0 8px 1px rgba(184,115,51,0.7);
+  }
+  h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: clamp(2.4rem, 6vw, 4.6rem);
+    line-height: 1.05;
+    max-width: 14ch;
+    letter-spacing: -0.01em;
+  }
+  h1 em {
+    font-style: normal;
+    color: var(--copper-bright);
+  }
+  .hero p.sub {
+    margin-top: 26px;
+    max-width: 52ch;
+    color: var(--silkscreen);
+    font-size: 1.08rem;
+  }
+  .hero-meta {
+    margin-top: 48px;
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .spec {
+    border-left: 2px solid var(--border);
+    padding-left: 14px;
+  }
+  .spec .label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--copper-bright);
+    font-weight: 700;
+  }
+  .spec .value {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    margin-top: 6px;
+  }
 
-  /* ---------- Section headers ---------- */
-  .section-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 56px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 20px;
-  }
-  .section-head h2 {
-    font-size: clamp(1.6rem, 3vw, 2.2rem);
-    font-weight: 600;
-  }
-  .section-head .eyebrow { margin: 0; }
+  /* ---------- Section headers ---------- */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 56px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+  }
+  .section-head h2 {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 600;
+  }
+  .section-head .eyebrow { margin: 0; }
 
-  /* ---------- Services / modules ---------- */
-  .modules {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-  }
-  .module {
-    background: var(--board-panel);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 32px;
-    position: relative;
-  }
-  .module::before {
-    content: attr(data-pin);
-    position: absolute;
-    top: -1px; left: 24px;
-    transform: translateY(-50%);
-    background: var(--board);
-    padding: 0 8px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    color: var(--copper);
-  }
-  .module h3 {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 12px;
-  }
-  .module p {
-    color: var(--silkscreen);
-    font-size: 0.96rem;
-  }
-  .module ul {
-    margin-top: 18px;
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .module li {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--silkscreen-dim);
-    border: 1px solid var(--border);
-    padding: 4px 10px;
-    border-radius: 3px;
-  }
+  /* ---------- Services / modules ---------- */
+  .modules {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .module {
+    background: var(--board-panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 32px;
+    position: relative;
+  }
+  .module::before {
+    content: attr(data-pin);
+    position: absolute;
+    top: -1px; left: 24px;
+    transform: translateY(-50%);
+    background: var(--board);
+    padding: 0 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--copper);
+  }
+  .module h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .module p {
+    color: var(--silkscreen);
+    font-size: 0.96rem;
+  }
+  .module ul {
+    margin-top: 18px;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .module li {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--silkscreen-dim);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 3px;
+  }
 
-  /* ---------- Work grid ---------- */
-  .work-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 28px;
-  }
-  .project-card {
-    background: var(--board-panel);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    overflow: hidden;
-    transition: border-color 0.25s ease, transform 0.25s ease;
-  }
-  .project-card:hover {
-    border-color: var(--copper);
-    transform: translateY(-4px);
-  }
-  .card-top {
-    aspect-ratio: 16/10;
-    background:
-      repeating-linear-gradient(45deg, var(--board-panel-2) 0 2px, transparent 2px 14px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 1px solid var(--border);
-  }
-  .card-top span {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    color: var(--silkscreen-dim);
-    text-transform: uppercase;
-  }
-  .card-body { padding: 24px; }
-  .card-body h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; }
-  .card-body p { color: var(--silkscreen); font-size: 0.9rem; margin-bottom: 16px; }
-  .card-meta {
-    display: flex;
-    justify-content: space-between;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.68rem;
-    color: var(--silkscreen-dim);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    border-top: 1px solid var(--border);
-    padding-top: 14px;
-  }
+  /* ---------- Work grid ---------- */
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 28px;
+  }
+  .project-card {
+    background: var(--board-panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+  }
+  .project-card:hover {
+    border-color: var(--copper);
+    transform: translateY(-4px);
+  }
+  .card-top {
+    aspect-ratio: 16/10;
+    background:
+      repeating-linear-gradient(45deg, var(--board-panel-2) 0 2px, transparent 2px 14px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-top span {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--silkscreen-dim);
+    text-transform: uppercase;
+  }
+  .card-body { padding: 24px; }
+  .card-body h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; }
+  .card-body p { color: var(--silkscreen); font-size: 0.9rem; margin-bottom: 16px; }
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--silkscreen-dim);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+  }
 
-  /* ---------- Process ---------- */
-  .process-list {
-    display: flex;
-    flex-direction: column;
-  }
-  .process-item {
-    display: grid;
-    grid-template-columns: 90px 1fr;
-    gap: 28px;
-    padding: 28px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .process-item:first-child { padding-top: 0; }
-  .process-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.85rem;
-    color: var(--copper);
-  }
-  .process-item h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 6px; }
-  .process-item p { color: var(--silkscreen); font-size: 0.92rem; max-width: 56ch; }
+  /* ---------- Process ---------- */
+  .process-list {
+    display: flex;
+    flex-direction: column;
+  }
+  .process-item {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 28px;
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .process-item:first-child { padding-top: 0; }
+  .process-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--copper);
+  }
+  .process-item h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 6px; }
+  .process-item p { color: var(--silkscreen); font-size: 0.92rem; max-width: 56ch; }
 
-  /* ---------- Duo ---------- */
-  .duo-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-  @media (max-width: 980px) {
-    .duo-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  .person-card {
-    background: var(--board-panel);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 28px;
-  }
-  .person-avatar {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    background: var(--board-panel-2);
-    border: 1px solid var(--border);
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Space Mono', monospace;
-    color: var(--copper);
-    font-size: 0.85rem;
-  }
-  .person-card h3 { font-size: 1.1rem; margin-bottom: 4px; }
-  .person-card .role {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--copper-bright);
-    margin-bottom: 14px;
-    display: block;
-  }
-  .person-card p { color: var(--silkscreen); font-size: 0.9rem; }
+  /* ---------- Duo ---------- */
+  .duo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  @media (max-width: 980px) {
+    .duo-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .person-card {
+    background: var(--board-panel);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px;
+  }
+  .person-avatar {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: var(--board-panel-2);
+    border: 1px solid var(--border);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    color: var(--copper);
+    font-size: 0.85rem;
+  }
+  .person-card h3 { font-size: 1.1rem; margin-bottom: 4px; }
+  .person-card .role {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--copper-bright);
+    margin-bottom: 14px;
+    display: block;
+  }
+  .person-card p { color: var(--silkscreen); font-size: 0.9rem; }
 
-  /* ---------- Contact ---------- */
-  .contact-panel {
-    background: var(--board-panel);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 64px 6vw;
-    text-align: center;
-    position: relative;
-  }
-  .contact-panel h2 {
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-    font-weight: 700;
-    max-width: 18ch;
-    margin: 0 auto 20px;
-  }
-  .contact-panel p {
-    color: var(--silkscreen);
-    max-width: 46ch;
-    margin: 0 auto 32px;
-  }
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--copper);
-    color: var(--board);
-    font-family: 'Space Mono', monospace;
-    font-size: 0.82rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 14px 28px;
-    border-radius: 3px;
-    font-weight: 700;
-    transition: background 0.2s ease;
-  }
-  .btn:hover { background: var(--copper-bright); }
+  /* ---------- Contact ---------- */
+  .contact-panel {
+    background: var(--board-panel);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 64px 6vw;
+    text-align: center;
+    position: relative;
+  }
+  .contact-panel h2 {
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    font-weight: 700;
+    max-width: 18ch;
+    margin: 0 auto 20px;
+  }
+  .contact-panel p {
+    color: var(--silkscreen);
+    max-width: 46ch;
+    margin: 0 auto 32px;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--copper);
+    color: var(--board);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: 3px;
+    font-weight: 700;
+    transition: background 0.2s ease;
+  }
+  .btn:hover { background: var(--copper-bright); }
 
-  .btn-ig {
-    background: linear-gradient(45deg, #4f5bd5, #962fbf, #d62976, #fa7e1e, #feda75);
-    color: #fff;
-    font-weight: 700;
-  }
-  .btn-ig:hover {
-    filter: brightness(1.1);
-    background: linear-gradient(45deg, #4f5bd5, #962fbf, #d62976, #fa7e1e, #feda75);
-  }
+  .btn-ig {
+    background: linear-gradient(45deg, #4f5bd5, #962fbf, #d62976, #fa7e1e, #feda75);
+    color: #fff;
+    font-weight: 700;
+  }
+  .btn-ig:hover {
+    filter: brightness(1.1);
+    background: linear-gradient(45deg, #4f5bd5, #962fbf, #d62976, #fa7e1e, #feda75);
+  }
 
-  /* ---------- Language toggle ---------- */
-  .lang-toggle {
-    display: flex;
-    align-items: center;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    overflow: hidden;
-    margin-right: 20px;
-  }
-  .lang-toggle button {
-    background: none;
-    border: none;
-    color: var(--silkscreen-dim);
-    padding: 6px 14px;
-    cursor: pointer;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    transition: background 0.2s ease, color 0.2s ease;
-  }
-  .lang-toggle button.active {
-    background: var(--copper);
-    color: var(--board);
-    font-weight: 700;
-  }
-  .header-right {
-    display: flex;
-    align-items: center;
-  }
+  /* ---------- Language toggle ---------- */
+  .lang-toggle {
+    display: flex;
+    align-items: center;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-right: 20px;
+  }
+  .lang-toggle button {
+    background: none;
+    border: none;
+    color: var(--silkscreen-dim);
+    padding: 6px 14px;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .lang-toggle button.active {
+    background: var(--copper);
+    color: var(--board);
+    font-weight: 700;
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+  }
 
-  /* Kurdish text handling — scoped to translated text only, layout stays LTR */
-  body.lang-ku [data-i18n] {
-    font-family: 'Noto Kufi Arabic', sans-serif;
-    direction: rtl;
-    unicode-bidi: isolate;
-  }
-  body.lang-ku .hero .sub,
-  body.lang-ku h1,
-  body.lang-ku .module p,
-  body.lang-ku .process-item p {
-    text-align: right;
-  }
-  body.lang-ku h1 {
-    font-size: clamp(1.9rem, 5.2vw, 3.4rem);
-    line-height: 1.7;
-  }
-  body.lang-ku .hero .sub {
-    line-height: 1.9;
-  }
-  body.lang-ku .spec .label {
-    font-size: 0.85rem;
-  }
+  /* Kurdish text handling — scoped to translated text only, layout stays LTR */
+  body.lang-ku [data-i18n] {
+    font-family: 'Noto Kufi Arabic', sans-serif;
+    direction: rtl;
+    unicode-bidi: isolate;
+  }
+  body.lang-ku .hero .sub,
+  body.lang-ku h1,
+  body.lang-ku .module p,
+  body.lang-ku .process-item p {
+    text-align: right;
+  }
+  body.lang-ku h1 {
+    font-size: clamp(1.9rem, 5.2vw, 3.4rem);
+    line-height: 1.7;
+  }
+  body.lang-ku .hero .sub {
+    line-height: 1.9;
+  }
+  body.lang-ku .spec .label {
+    font-size: 0.85rem;
+  }
 
-  footer {
-    padding: 40px 6vw 60px;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 16px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--silkscreen-dim);
-    letter-spacing: 0.04em;
-    position: relative;
-    z-index: 2;
-  }
-  footer a:hover { color: var(--copper-bright); }
+  footer {
+    padding: 40px 6vw 60px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--silkscreen-dim);
+    letter-spacing: 0.04em;
+    position: relative;
+    z-index: 2;
+  }
+  footer a:hover { color: var(--copper-bright); }
 
-  @media (max-width: 760px) {
-    .modules, .work-grid, .duo-grid { grid-template-columns: 1fr; }
-    nav.desktop-nav { display: none; }
-    .hamburger { display: flex; }
-    section { padding: 80px 6vw; }
-    .process-item { grid-template-columns: 50px 1fr; gap: 16px; }
-  }
+  @media (max-width: 760px) {
+    .modules, .work-grid, .duo-grid { grid-template-columns: 1fr; }
+    nav.desktop-nav { display: none; }
+    .hamburger { display: flex; }
+    section { padding: 80px 6vw; }
+    .process-item { grid-template-columns: 50px 1fr; gap: 16px; }
+  }
 
-  [data-reveal] {
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  [data-reveal].visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  [data-reveal].visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 </style>
 </head>
 <body>
 
 <svg id="trace-svg" preserveAspectRatio="none">
-  <path id="trace-path" d="M1,0 L1,1" vector-effect="non-scaling-stroke"></path>
+  <path id="trace-path" d="M1,0 L1,1" vector-effect="non-scaling-stroke"></path>
 </svg>
 
 <header>
-  <div class="logo">astrocode<span>.krd</span></div>
-  <div class="header-right">
-    <div class="lang-toggle">
-      <button id="lang-en" class="active" aria-pressed="true">EN</button>
-      <button id="lang-ku" aria-pressed="false">KU</button>
-    </div>
-    <nav class="desktop-nav">
-      <a href="#work" data-i18n="nav_work">Work</a>
-      <a href="#services" data-i18n="nav_services">Services</a>
-      <a href="#process" data-i18n="nav_process">Process</a>
-      <a href="#duo" data-i18n="nav_team">Team</a>
-      <a href="#contact" data-i18n="nav_contact">Contact</a>
-    </nav>
-    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
+  <div class="logo">astrocode<span>.krd</span></div>
+  <div class="header-right">
+    <div class="lang-toggle">
+      <button id="lang-en" class="active" aria-pressed="true">EN</button>
+      <button id="lang-ku" aria-pressed="false">KU</button>
+    </div>
+    <nav class="desktop-nav">
+      <a href="#work" data-i18n="nav_work">Work</a>
+      <a href="#services" data-i18n="nav_services">Services</a>
+      <a href="#process" data-i18n="nav_process">Process</a>
+      <a href="#duo" data-i18n="nav_team">Team</a>
+      <a href="#contact" data-i18n="nav_contact">Contact</a>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
 </header>
 
 <div class="nav-scrim" id="nav-scrim"></div>
 <nav class="mobile-nav" id="mobile-nav">
-  <a href="#work" data-i18n="nav_work">Work</a>
-  <a href="#services" data-i18n="nav_services">Services</a>
-  <a href="#process" data-i18n="nav_process">Process</a>
-  <a href="#duo" data-i18n="nav_team">Team</a>
-  <a href="#contact" data-i18n="nav_contact">Contact</a>
+  <a href="#work" data-i18n="nav_work">Work</a>
+  <a href="#services" data-i18n="nav_services">Services</a>
+  <a href="#process" data-i18n="nav_process">Process</a>
+  <a href="#duo" data-i18n="nav_team">Team</a>
+  <a href="#contact" data-i18n="nav_contact">Contact</a>
 </nav>
 
 <section class="hero node" id="top">
-  <div class="eyebrow" data-i18n="hero_eyebrow">Sulaymaniyah, IQ — Est. 2026</div>
-  <h1 data-i18n="hero_h1">We build <em>high-caliber websites and apps</em> at accessible prices.</h1>
-  <p class="sub" data-i18n="hero_sub">One dedicated team, zero hand-off friction. We design, build, and launch full-stack web, mobile, and desktop products — guiding your project from wireframe to the final interactive interface.</p>
-  <div class="hero-meta">
-    <div class="spec">
-      <div class="label" data-i18n="spec_stack_label">Stack</div>
-      <div class="value">Web · Mobile · Backend</div>
-    </div>
-    <div class="spec">
-      <div class="label" data-i18n="spec_status_label">Status</div>
-      <div class="value" data-i18n="spec_status_value">Currently accepting new projects</div>
-    </div>
-    <div class="spec">
-      <div class="label" data-i18n="spec_turnaround_label">Turnaround</div>
-      <div class="value">2–6 weeks / project</div>
-    </div>
-  </div>
+  <div class="eyebrow" data-i18n="hero_eyebrow">Sulaymaniyah, IQ — Est. 2026</div>
+  <h1 data-i18n="hero_h1">We build <em>high-caliber websites and apps</em> at accessible prices.</h1>
+  <p class="sub" data-i18n="hero_sub">One dedicated team, zero hand-off friction. We design, build, and launch full-stack web, mobile, and desktop products — guiding your project from wireframe to the final interactive interface.</p>
+  <div class="hero-meta">
+    <div class="spec">
+      <div class="label" data-i18n="spec_stack_label">Stack</div>
+      <div class="value">Web · Mobile · Backend</div>
+    </div>
+    <div class="spec">
+      <div class="label" data-i18n="spec_status_label">Status</div>
+      <div class="value" data-i18n="spec_status_value">Currently accepting new projects</div>
+    </div>
+    <div class="spec">
+      <div class="label" data-i18n="spec_turnaround_label">Turnaround</div>
+      <div class="value">2–6 weeks / project</div>
+    </div>
+  </div>
 </section>
 
 <section id="services" class="node">
-  <div class="section-head">
-    <h2 data-i18n="services_h2">Capabilities</h2>
-    <div class="eyebrow">02 — Modules</div>
-  </div>
-  <div class="modules">
-    <div class="module" data-pin="U1 · WEB">
-      <h3 data-i18n="services_web_h3">Websites</h3>
-      <p data-i18n="services_web_p">From marketing sites to full storefronts — engineered for speed, responsiveness, and visibility from day one.</p>
-      <ul>
-        <li>Landing pages</li>
-        <li>Portfolio sites</li>
-        <li>Small e-commerce</li>
-      </ul>
-    </div>
-    <div class="module" data-pin="U2 · APP">
-      <h3 data-i18n="services_app_h3">Apps</h3>
-      <p data-i18n="services_app_p">Mobile and desktop applications built for real-world workflows, from internal tools to consumer-facing products.</p>
-      <ul>
-        <li>Android / Flutter</li>
-        <li>Desktop utilities</li>
-        <li>Database-backed tools</li>
-      </ul>
-    </div>
-  </div>
+  <div class="section-head">
+    <h2 data-i18n="services_h2">Capabilities</h2>
+    <div class="eyebrow">02 — Modules</div>
+  </div>
+  <div class="modules">
+    <div class="module" data-pin="U1 · WEB">
+      <h3 data-i18n="services_web_h3">Websites</h3>
+      <p data-i18n="services_web_p">From marketing sites to full storefronts — engineered for speed, responsiveness, and visibility from day one.</p>
+      <ul>
+        <li>Landing pages</li>
+        <li>Portfolio sites</li>
+        <li>Small e-commerce</li>
+      </ul>
+    </div>
+    <div class="module" data-pin="U2 · APP">
+      <h3 data-i18n="services_app_h3">Apps</h3>
+      <p data-i18n="services_app_p">Mobile and desktop applications built for real-world workflows, from internal tools to consumer-facing products.</p>
+      <ul>
+        <li>Android / Flutter</li>
+        <li>Desktop utilities</li>
+        <li>Database-backed tools</li>
+      </ul>
+    </div>
+  </div>
 </section>
 
 <section id="work" class="node">
-  <div class="section-head">
-    <h2 data-i18n="work_h2">Selected Work</h2>
-    <div class="eyebrow">03 — Log</div>
-  </div>
-  <div class="work-grid">
-    <div class="project-card">
-      <div class="card-top"><span>[Project screenshot]</span></div>
-      <div class="card-body">
-        <h3>[Project Name]</h3>
-        <p>[One line on what it does and who it's for.]</p>
-        <div class="card-meta"><span>[Client]</span><span>[Year]</span></div>
-      </div>
-    </div>
-    <div class="project-card">
-      <div class="card-top"><span>[Project screenshot]</span></div>
-      <div class="card-body">
-        <h3>[Project Name]</h3>
-        <p>[One line on what it does and who it's for.]</p>
-        <div class="card-meta"><span>[Client]</span><span>[Year]</span></div>
-      </div>
-    </div>
-    <div class="project-card">
-      <div class="card-top"><span>[Project screenshot]</span></div>
-      <div class="card-body">
-        <h3>[Project Name]</h3>
-        <p>[One line on what it does and who it's for.]</p>
-        <div class="card-meta"><span>[Client]</span><span>[Year]</span></div>
-      </div>
-    </div>
-    <div class="project-card">
-      <div class="card-top"><span>[Project screenshot]</span></div>
-      <div class="card-body">
-        <h3>[Project Name]</h3>
-        <p>[One line on what it does and who it's for.]</p>
-        <div class="card-meta"><span>[Client]</span><span>[Year]</span></div>
-      </div>
-    </div>
-  </div>
+  <div class="section-head">
+    <h2 data-i18n="work_h2">Selected Work</h2>
+    <div class="eyebrow">03 — Log</div>
+  </div>
+  <div class="work-grid">
+    <div class="project-card">
+      <div class="card-top"><span>[Project screenshot]</span></div>
+      <div class="card-body">
+        <h3>[Project Name]</h3>
+        <p>[One line on what it does and who it's for.]</p>
+        <div class="card-meta"><span>[Client]</span><span>[Year]</span></div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="card-top"><span>[Project screenshot]</span></div>
+      <div class="card-body">
+        <h3>[Project Name]</h3>
+        <p>[One line on what it does and who it's for.]</p>
+        <div class="card-meta"><span>[Client]</span><span>[Year]</span></div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="card-top"><span>[Project screenshot]</span></div>
+      <div class="card-body">
+        <h3>[Project Name]</h3>
+        <p>[One line on what it does and who it's for.]</p>
+        <div class="card-meta"><span>[Client]</span><span>[Year]</span></div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="card-top"><span>[Project screenshot]</span></div>
+      <div class="card-body">
+        <h3>[Project Name]</h3>
+        <p>[One line on what it does and who it's for.]</p>
+        <div class="card-meta"><span>[Client]</span><span>[Year]</span></div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section id="process" class="node">
-  <div class="section-head">
-    <h2 data-i18n="process_h2">Our Process</h2>
-    <div class="eyebrow">04 — Sequence</div>
-  </div>
-  <div class="process-list">
-    <div class="process-item">
-      <div class="process-num">01</div>
-      <div>
-        <h3 data-i18n="process_1_h3">Discovery</h3>
-        <p data-i18n="process_1_p">We start with a focused conversation to define your goals, audience, budget, and timeline — no jargon, no upselling.</p>
-      </div>
-    </div>
-    <div class="process-item">
-      <div class="process-num">02</div>
-      <div>
-        <h3 data-i18n="process_2_h3">Design</h3>
-        <p data-i18n="process_2_p">We map the structure and visual direction before a single line of code is written, so the final build holds no surprises.</p>
-      </div>
-    </div>
-    <div class="process-item">
-      <div class="process-num">03</div>
-      <div>
-        <h3 data-i18n="process_3_h3">Build</h3>
-        <p data-i18n="process_3_p">Development happens in the open, with regular check-ins, working previews, and room to refine as we go.</p>
-      </div>
-    </div>
-    <div class="process-item">
-      <div class="process-num">04</div>
-      <div>
-        <h3 data-i18n="process_4_h3">Launch</h3>
-        <p data-i18n="process_4_p">We deploy the finished product, hand over everything you need to maintain it, and stay reachable after launch.</p>
-      </div>
-    </div>
-  </div>
+  <div class="section-head">
+    <h2 data-i18n="process_h2">Our Process</h2>
+    <div class="eyebrow">04 — Sequence</div>
+  </div>
+  <div class="process-list">
+    <div class="process-item">
+      <div class="process-num">01</div>
+      <div>
+        <h3 data-i18n="process_1_h3">Discovery</h3>
+        <p data-i18n="process_1_p">We start with a focused conversation to define your goals, audience, budget, and timeline — no jargon, no upselling.</p>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-num">02</div>
+      <div>
+        <h3 data-i18n="process_2_h3">Design</h3>
+        <p data-i18n="process_2_p">We map the structure and visual direction before a single line of code is written, so the final build holds no surprises.</p>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-num">03</div>
+      <div>
+        <h3 data-i18n="process_3_h3">Build</h3>
+        <p data-i18n="process_3_p">Development happens in the open, with regular check-ins, working previews, and room to refine as we go.</p>
+      </div>
+    </div>
+    <div class="process-item">
+      <div class="process-num">04</div>
+      <div>
+        <h3 data-i18n="process_4_h3">Launch</h3>
+        <p data-i18n="process_4_p">We deploy the finished product, hand over everything you need to maintain it, and stay reachable after launch.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <section id="duo" class="node">
-  <div class="section-head">
-    <h2 data-i18n="team_h2">The Team</h2>
-    <div class="eyebrow">05 — Team</div>
-  </div>
-  <div class="duo-grid">
-    <div class="person-card">
-      <div class="person-avatar">RH</div>
-      <h3>Rahand Hemn</h3>
-      <span class="role">Full-Stack Developer</span>
-      <p>Web · C# · Python · JavaScript · Dart · SQL · MySQL</p>
-    </div>
-    <div class="person-card">
-      <div class="person-avatar">SS</div>
-      <h3>Sarkar Salar</h3>
-      <span class="role">Full-Stack Developer</span>
-      <p>Web · C# · C++ · Python</p>
-    </div>
-    <div class="person-card">
-      <div class="person-avatar">MO</div>
-      <h3>Muhammed Omer</h3>
-      <span class="role">Full-Stack Developer</span>
-      <p>[Add stack — e.g. Web · C# · Python · JS]</p>
-    </div>
-  </div>
+  <div class="section-head">
+    <h2 data-i18n="team_h2">The Team</h2>
+    <div class="eyebrow">05 — Team</div>
+  </div>
+  <div class="duo-grid">
+    <div class="person-card">
+      <div class="person-avatar">RH</div>
+      <h3>Rahand Hemn</h3>
+      <span class="role">Full-Stack Developer</span>
+      <p>Web · C# · Python · JavaScript · Dart · SQL · MySQL</p>
+    </div>
+    <div class="person-card">
+      <div class="person-avatar">SS</div>
+      <h3>Sarkar Salar</h3>
+      <span class="role">Full-Stack Developer</span>
+      <p>Web · C# · C++ · Python</p>
+    </div>
+    <div class="person-card">
+      <div class="person-avatar">MO</div>
+      <h3>Muhammed Omer</h3>
+      <span class="role">Full-Stack Developer</span>
+      <p>[Add stack — e.g. Web · C# · Python · JS]</p>
+    </div>
+  </div>
 </section>
 
 <section id="contact" class="node">
-  <div class="contact-panel">
-    <div class="eyebrow" style="justify-content:center; display:flex;">06 — Contact</div>
-    <h2 data-i18n="contact_h2">Have a project in mind?</h2>
-    <p data-i18n="contact_p">Share what you're building. We'll respond with a clear plan and timeline — no obligation.</p>
-    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:8px;">
-      <a href="mailto:darvanjabar@gmail.com" class="btn" data-i18n="contact_cta">Start a project →</a>
-      <a href="https://www.instagram.com/astrocode.krd" target="_blank" rel="noopener" class="btn btn-ig">@astrocode.krd</a>
-    </div>
-    <div style="margin-top:22px; display:flex; gap:24px; justify-content:center; flex-wrap:wrap;">
-      <a href="tel:+9647721547883" class="mono" style="font-size:0.85rem; color:var(--silkscreen-dim);">+964 772 154 7883</a>
-    </div>
-  </div>
+  <div class="contact-panel">
+    <div class="eyebrow" style="justify-content:center; display:flex;">06 — Contact</div>
+    <h2 data-i18n="contact_h2">Have a project in mind?</h2>
+    <p data-i18n="contact_p">Share what you're building. We'll respond with a clear plan and timeline — no obligation.</p>
+    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:8px;">
+      <a href="mailto:darvanjabar@gmail.com" class="btn" data-i18n="contact_cta">Start a project →</a>
+      <a href="https://www.instagram.com/astrocode.krd" target="_blank" rel="noopener" class="btn btn-ig">@astrocode.krd</a>
+    </div>
+    <div style="margin-top:22px; display:flex; gap:24px; justify-content:center; flex-wrap:wrap;">
+      <a href="tel:+9647721547883" class="mono" style="font-size:0.85rem; color:var(--silkscreen-dim);">+964 772 154 7883</a>
+    </div>
+  </div>
 </section>
 
 <footer>
-  <div>© 2026 astrocode.krd. <span data-i18n="footer_built">Engineered in Sulaymaniyah.</span></div>
-  <div style="display:flex; gap:24px;">
-    <a href="https://www.instagram.com/astrocode.krd" target="_blank" rel="noopener">Instagram</a>
-    <a href="mailto:darvanjabar@gmail.com">Email</a>
-  </div>
+  <div>© 2026 astrocode.krd. <span data-i18n="footer_built">Engineered in Sulaymaniyah.</span></div>
+  <div style="display:flex; gap:24px;">
+    <a href="https://www.instagram.com/astrocode.krd" target="_blank" rel="noopener">Instagram</a>
+    <a href="mailto:darvanjabar@gmail.com">Email</a>
+  </div>
 </footer>
 
 <script>
-  // Draw the copper trace from top of hero to bottom of contact panel
-  function updateTracePath() {
-    const svg = document.getElementById('trace-svg');
-    const path = document.getElementById('trace-path');
-    const docHeight = document.body.scrollHeight;
-    svg.setAttribute('viewBox', `0 0 2 ${docHeight}`);
-    path.setAttribute('d', `M1,0 L1,${docHeight}`);
-    const len = docHeight;
-    path.style.strokeDasharray = len;
-    path.style.strokeDashoffset = len;
-  }
+  // Draw the copper trace from top of hero to bottom of contact panel
+  function updateTracePath() {
+    const svg = document.getElementById('trace-svg');
+    const path = document.getElementById('trace-path');
+    const docHeight = document.body.scrollHeight;
+    svg.setAttribute('viewBox', `0 0 2 ${docHeight}`);
+    path.setAttribute('d', `M1,0 L1,${docHeight}`);
+    const len = docHeight;
+    path.style.strokeDasharray = len;
+    path.style.strokeDashoffset = len;
+  }
 
-  function onScroll() {
-    const path = document.getElementById('trace-path');
-    const scrollTop = window.scrollY;
-    const winHeight = window.innerHeight;
-    const docHeight = document.body.scrollHeight - winHeight;
-    const progress = Math.min(scrollTop / docHeight, 1);
-    const len = document.body.scrollHeight;
-    path.style.strokeDashoffset = len - (len * progress);
+  function onScroll() {
+    const path = document.getElementById('trace-path');
+    const scrollTop = window.scrollY;
+    const winHeight = window.innerHeight;
+    const docHeight = document.body.scrollHeight - winHeight;
+    const progress = Math.min(scrollTop / docHeight, 1);
+    const len = document.body.scrollHeight;
+    path.style.strokeDashoffset = len - (len * progress);
 
-    document.querySelectorAll('.node').forEach(node => {
-      const rect = node.getBoundingClientRect();
-      if (rect.top < winHeight * 0.5 && rect.bottom > 0) {
-        node.classList.add('lit');
-      }
-    });
-  }
+    document.querySelectorAll('.node').forEach(node => {
+      const rect = node.getBoundingClientRect();
+      if (rect.top < winHeight * 0.5 && rect.bottom > 0) {
+        node.classList.add('lit');
+      }
+    });
+  }
 
-  window.addEventListener('resize', updateTracePath);
-  window.addEventListener('load', () => { updateTracePath(); onScroll(); });
-  window.addEventListener('scroll', onScroll);
+  window.addEventListener('resize', updateTracePath);
+  window.addEventListener('load', () => { updateTracePath(); onScroll(); });
+  window.addEventListener('scroll', onScroll);
 
-  // Recalculate once webfonts finish loading — layout can shift and
-  // desync the trace length if we only measure on window 'load'
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(() => { updateTracePath(); onScroll(); });
-  }
+  // Recalculate once webfonts finish loading — layout can shift and
+  // desync the trace length if we only measure on window 'load'
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(() => { updateTracePath(); onScroll(); });
+  }
 
-  // ---------- Language toggle (EN / Sorani Kurdish) ----------
-  const translations = {
-    en: {
-      hero_eyebrow: "Sulaymaniyah, IQ — Est. 2026",
-      hero_h1: "We build <em>high-caliber websites and apps</em> at accessible prices.",
-      hero_sub: "One dedicated team, zero hand-off friction. We design, build, and launch full-stack web, mobile, and desktop products — guiding your project from wireframe to the final interactive interface.",
-      spec_stack_label: "Stack",
-      spec_status_label: "Status",
-      spec_status_value: "Currently accepting new projects",
-      spec_turnaround_label: "Turnaround",
-      services_h2: "Capabilities",
-      services_web_h3: "Websites",
-      services_web_p: "From marketing sites to full storefronts — engineered for speed, responsiveness, and visibility from day one.",
-      services_app_h3: "Apps",
-      services_app_p: "Mobile and desktop applications built for real-world workflows, from internal tools to consumer-facing products.",
-      work_h2: "Selected Work",
-      process_h2: "Our Process",
-      process_1_h3: "Discovery",
-      process_1_p: "We start with a focused conversation to define your goals, audience, budget, and timeline — no jargon, no upselling.",
-      process_2_h3: "Design",
-      process_2_p: "We map the structure and visual direction before a single line of code is written, so the final build holds no surprises.",
-      process_3_h3: "Build",
-      process_3_p: "Development happens in the open, with regular check-ins, working previews, and room to refine as we go.",
-      process_4_h3: "Launch",
-      process_4_p: "We deploy the finished product, hand over everything you need to maintain it, and stay reachable after launch.",
-      team_h2: "The Team",
-      contact_h2: "Have a project in mind?",
-      contact_p: "Share what you're building. We'll respond with a clear plan and timeline — no obligation.",
-      contact_cta: "Start a project →",
-      footer_built: "Engineered in Sulaymaniyah.",
-      nav_work: "Work",
-      nav_services: "Services",
-      nav_process: "Process",
-      nav_team: "Team",
-      nav_contact: "Contact"
-    },
-    ku: {
-      hero_eyebrow: "سلێمانی، عێراق — دامەزراوی ٢٠٢٦",
-      hero_h1: "ماڵپەڕ و <em>ئەپلیکەیشنی کوالیتی بەرز</em> بە نرخێکی گونجاو دروست دەکەین.",
-      hero_sub: "یەک تیمی تەرخانکراو، بەبێ کێشە لە ڕادەستکردنی کار لەنێوان بەشەکان. بەرنامەی full-stack بۆ وێب، مۆبایل و دیسکتۆپ دیزاین، دروست و بڵاو دەکەینەوە — پرۆژەکەت لە wireframe‌ەوە تاکو دوایین ئینتەرفەیسی کارلێکەر، ڕابەرایەتی دەکەین.",
-      spec_stack_label: "پێکهاتە",
-      spec_status_label: "بارودۆخ",
-      spec_status_value: "ئێستا ئامادەین بۆ وەرگرتنی پرۆژەی نوێ",
-      spec_turnaround_label: "کاتی تەواوکردن",
-      services_h2: "توانا و لێهاتووییەکانمان",
-      services_web_h3: "ماڵپەڕ",
-      services_web_p: "لە ماڵپەڕی بازاڕگەری تا دوکانی ئۆنلاینی تەواو — داڕێژراوە بۆ خێرایی، وەڵامدانەوەی بەرز، و دیاربوونی بەهێز لە یەکەم ڕۆژەوە.",
-      services_app_h3: "ئەپڵیکەیشن",
-      services_app_p: "ئەپلیکەیشنی مۆبایل و دیسکتۆپ کە بۆ کاری ڕاستەقینە دروستکراون، لە ئامرازی ناوخۆیی تا بەرهەمی ڕاستەوخۆ بۆ بەکارهێنەر.",
-      work_h2: "هەڵبژاردەی کارەکانمان",
-      process_h2: "پرۆسەکەمان",
-      process_1_h3: "دۆزینەوە",
-      process_1_p: "بە گفتوگۆیەکی وردەوە دەست پێدەکەین بۆ دیاریکردنی ئامانج، بەکارهێنەران، بودجە و کاتی تەواوکردن — بێ وشەی گران، بێ فشار بۆ کڕین.",
-      process_2_h3: "دیزاین",
-      process_2_p: "پێش نووسینی تاکە دێڕێکی کۆد، پێکهاتە و ڕووکاری دیزاین دەکەین، بۆ ئەوەی کارە کۆتاییەکە هیچ سەرسوڕمانێکی تێدا نەبێت.",
-      process_3_h3: "دروستکردن",
-      process_3_p: "گەشەپێدان بە شێوەیەکی ڕوون و بەردەوام ئەنجام دەدرێت، لەگەڵ پەیوەندی بەردەوام، پیشاندانی کارە کارا، و بۆشایی بۆ باشترکردن.",
-      process_4_h3: "بڵاوکردنەوە",
-      process_4_p: "بەرهەمە کۆتاییەکە بڵاو دەکەینەوە، هەموو ئەوەی پێویستە بۆ چاودێری کردنی دەیدەینە دەستت، و لەدوای بڵاوکردنەوەش لەگەڵت دەمێنینەوە.",
-      team_h2: "تیمەکە",
-      contact_h2: "بیر لە دروستکردنی پڕۆژەیەک دەکەیتەوە؟",
-      contact_p: "ئەوەی دەتەوێت دروستی بکەیت لەگەڵمان هاوبەش بکە. وەڵامت دەدەینەوە لەگەڵ پلانێکی ڕوون و کاتی تەواوکردن — بێ هیچ ئەرکێک لەسەرت.",
-      contact_cta: "دەست بکە بە پرۆژەیەک →",
-      footer_built: "بە وردی و پیشەیی دروستکراوە لە سلێمانی.",
-      nav_work: "کارەکان",
-      nav_services: "خزمەتگوزاری",
-      nav_process: "پرۆسە",
-      nav_team: "تیم",
-      nav_contact: "پەیوەندی"
-    }
-  };
+  // ---------- Language toggle (EN / Sorani Kurdish) ----------
+  const translations = {
+    en: {
+      hero_eyebrow: "Sulaymaniyah, IQ — Est. 2026",
+      hero_h1: "We build <em>high-caliber websites and apps</em> at accessible prices.",
+      hero_sub: "One dedicated team, zero hand-off friction. We design, build, and launch full-stack web, mobile, and desktop products — guiding your project from wireframe to the final interactive interface.",
+      spec_stack_label: "Stack",
+      spec_status_label: "Status",
+      spec_status_value: "Currently accepting new projects",
+      spec_turnaround_label: "Turnaround",
+      services_h2: "Capabilities",
+      services_web_h3: "Websites",
+      services_web_p: "From marketing sites to full storefronts — engineered for speed, responsiveness, and visibility from day one.",
+      services_app_h3: "Apps",
+      services_app_p: "Mobile and desktop applications built for real-world workflows, from internal tools to consumer-facing products.",
+      work_h2: "Selected Work",
+      process_h2: "Our Process",
+      process_1_h3: "Discovery",
+      process_1_p: "We start with a focused conversation to define your goals, audience, budget, and timeline — no jargon, no upselling.",
+      process_2_h3: "Design",
+      process_2_p: "We map the structure and visual direction before a single line of code is written, so the final build holds no surprises.",
+      process_3_h3: "Build",
+      process_3_p: "Development happens in the open, with regular check-ins, working previews, and room to refine as we go.",
+      process_4_h3: "Launch",
+      process_4_p: "We deploy the finished product, hand over everything you need to maintain it, and stay reachable after launch.",
+      team_h2: "The Team",
+      contact_h2: "Have a project in mind?",
+      contact_p: "Share what you're building. We'll respond with a clear plan and timeline — no obligation.",
+      contact_cta: "Start a project →",
+      footer_built: "Engineered in Sulaymaniyah.",
+      nav_work: "Work",
+      nav_services: "Services",
+      nav_process: "Process",
+      nav_team: "Team",
+      nav_contact: "Contact"
+    },
+    ku: {
+      hero_eyebrow: "سلێمانی، عێراق — دامەزراوی ٢٠٢٦",
+      hero_h1: "ماڵپەڕ و <em>ئەپلیکەیشنی کوالیتی بەرز</em> بە نرخێکی گونجاو دروست دەکەین.",
+      hero_sub: "یەک تیمی تەرخانکراو، بەبێ کێشە لە ڕادەستکردنی کار لەنێوان بەشەکان. بەرنامەی full-stack بۆ وێب، مۆبایل و دیسکتۆپ دیزاین، دروست و بڵاو دەکەینەوە — پرۆژەکەت لە wireframe‌ەوە تاکو دوایین ئینتەرفەیسی کارلێکەر، ڕابەرایەتی دەکەین.",
+      spec_stack_label: "پێکهاتە",
+      spec_status_label: "بارودۆخ",
+      spec_status_value: "ئێستا ئامادەین بۆ وەرگرتنی پرۆژەی نوێ",
+      spec_turnaround_label: "کاتی تەواوکردن",
+      services_h2: "توانا و لێهاتووییەکانمان",
+      services_web_h3: "ماڵپەڕ",
+      services_web_p: "لە ماڵپەڕی بازاڕگەری تا دوکانی ئۆنلاینی تەواو — داڕێژراوە بۆ خێرایی، وەڵامدانەوەی بەرز، و دیاربوونی بەهێز لە یەکەم ڕۆژەوە.",
+      services_app_h3: "ئەپڵیکەیشن",
+      services_app_p: "ئەپلیکەیشنی مۆبایل و دیسکتۆپ کە بۆ کاری ڕاستەقینە دروستکراون، لە ئامرازی ناوخۆیی تا بەرهەمی ڕاستەوخۆ بۆ بەکارهێنەر.",
+      work_h2: "هەڵبژاردەی کارەکانمان",
+      process_h2: "پرۆسەکەمان",
+      process_1_h3: "دۆزینەوە",
+      process_1_p: "بە گفتوگۆیەکی وردەوە دەست پێدەکەین بۆ دیاریکردنی ئامانج، بەکارهێنەران، بودجە و کاتی تەواوکردن — بێ وشەی گران، بێ فشار بۆ کڕین.",
+      process_2_h3: "دیزاین",
+      process_2_p: "پێش نووسینی تاکە دێڕێکی کۆد، پێکهاتە و ڕووکاری دیزاین دەکەین، بۆ ئەوەی کارە کۆتاییەکە هیچ سەرسوڕمانێکی تێدا نەبێت.",
+      process_3_h3: "دروستکردن",
+      process_3_p: "گەشەپێدان بە شێوەیەکی ڕوون و بەردەوام ئەنجام دەدرێت، لەگەڵ پەیوەندی بەردەوام، پیشاندانی کارە کارا، و بۆشایی بۆ باشترکردن.",
+      process_4_h3: "بڵاوکردنەوە",
+      process_4_p: "بەرهەمە کۆتاییەکە بڵاو دەکەینەوە، هەموو ئەوەی پێویستە بۆ چاودێری کردنی دەیدەینە دەستت، و لەدوای بڵاوکردنەوەش لەگەڵت دەمێنینەوە.",
+      team_h2: "تیمەکە",
+      contact_h2: "بیر لە دروستکردنی پڕۆژەیەک دەکەیتەوە؟",
+      contact_p: "ئەوەی دەتەوێت دروستی بکەیت لەگەڵمان هاوبەش بکە. وەڵامت دەدەینەوە لەگەڵ پلانێکی ڕوون و کاتی تەواوکردن — بێ هیچ ئەرکێک لەسەرت.",
+      contact_cta: "دەست بکە بە پرۆژەیەک →",
+      footer_built: "بە وردی و پیشەیی دروستکراوە لە سلێمانی.",
+      nav_work: "کارەکان",
+      nav_services: "خزمەتگوزاری",
+      nav_process: "پرۆسە",
+      nav_team: "تیم",
+      nav_contact: "پەیوەندی"
+    }
+  };
 
-  function applyLanguage(lang) {
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      const value = translations[lang][key];
-      if (value) el.innerHTML = value;
-    });
-    document.body.classList.toggle('lang-ku', lang === 'ku');
-    document.getElementById('lang-en').classList.toggle('active', lang === 'en');
-    document.getElementById('lang-ku').classList.toggle('active', lang === 'ku');
-    document.getElementById('lang-en').setAttribute('aria-pressed', String(lang === 'en'));
-    document.getElementById('lang-ku').setAttribute('aria-pressed', String(lang === 'ku'));
-    // Layout reflows when the font/script changes — recalc the trace line
-    updateTracePath();
-    onScroll();
-  }
+  function applyLanguage(lang) {
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      const value = translations[lang][key];
+      if (value) el.innerHTML = value;
+    });
+    document.body.classList.toggle('lang-ku', lang === 'ku');
+    document.getElementById('lang-en').classList.toggle('active', lang === 'en');
+    document.getElementById('lang-ku').classList.toggle('active', lang === 'ku');
+    document.getElementById('lang-en').setAttribute('aria-pressed', String(lang === 'en'));
+    document.getElementById('lang-ku').setAttribute('aria-pressed', String(lang === 'ku'));
+    // Layout reflows when the font/script changes — recalc the trace line
+    updateTracePath();
+    onScroll();
+  }
 
-  document.getElementById('lang-en').addEventListener('click', () => applyLanguage('en'));
-  document.getElementById('lang-ku').addEventListener('click', () => applyLanguage('ku'));
+  document.getElementById('lang-en').addEventListener('click', () => applyLanguage('en'));
+  document.getElementById('lang-ku').addEventListener('click', () => applyLanguage('ku'));
 
-  // Mobile nav toggle
-  const hamburger = document.getElementById('hamburger');
-  const mobileNav = document.getElementById('mobile-nav');
-  const navScrim = document.getElementById('nav-scrim');
+  // Mobile nav toggle
+  const hamburger = document.getElementById('hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+  const navScrim = document.getElementById('nav-scrim');
 
-  function closeMobileNav() {
-    hamburger.classList.remove('open');
-    mobileNav.classList.remove('open');
-    navScrim.classList.remove('open');
-    hamburger.setAttribute('aria-expanded', 'false');
-  }
-  function toggleMobileNav() {
-    const isOpen = mobileNav.classList.toggle('open');
-    hamburger.classList.toggle('open', isOpen);
-    navScrim.classList.toggle('open', isOpen);
-    hamburger.setAttribute('aria-expanded', String(isOpen));
-  }
-  hamburger.addEventListener('click', toggleMobileNav);
-  navScrim.addEventListener('click', closeMobileNav);
-  mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobileNav));
+  function closeMobileNav() {
+    hamburger.classList.remove('open');
+    mobileNav.classList.remove('open');
+    navScrim.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
+  }
+  function toggleMobileNav() {
+    const isOpen = mobileNav.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    navScrim.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', String(isOpen));
+  }
+  hamburger.addEventListener('click', toggleMobileNav);
+  navScrim.addEventListener('click', closeMobileNav);
+  mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobileNav));
 
-  // Reveal on scroll
-  const revealEls = document.querySelectorAll('.module, .project-card, .process-item, .person-card');
-  revealEls.forEach(el => el.setAttribute('data-reveal', ''));
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-  }, { threshold: 0.15 });
-  revealEls.forEach(el => observer.observe(el));
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.module, .project-card, .process-item, .person-card');
+  revealEls.forEach(el => el.setAttribute('data-reveal', ''));
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => observer.observe(el));
 </script>
 
 </body>
