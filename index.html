@@ -10,8 +10,6 @@
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="icon" href="imgs/astrocodeLOGO.jpg" type="image/jpeg">
-<link rel="apple-touch-icon" href="imgs/astrocodeLOGO.jpg">
 <style>
   :root {
     --board: #12151A;
@@ -208,6 +206,13 @@
   .logo span { color: var(--copper-bright); }
   .site-logo {
     width: 40px;
+    height: 40px;
+    object-fit: contain;
+    margin-right: 10px;
+    vertical-align: middle;
+    border-radius: 4px;
+    display: inline-block;
+  }
   nav { display: flex; gap: 36px; }
   nav a {
     font-family: 'Space Mono', monospace;
@@ -604,7 +609,7 @@
 </svg>
 
 <header>
-  <div class="logo">astrocode<span>.krd</span></div>
+  <div class="logo"><img src="imgs/astrocodeLOGO.jpg" alt="AstroCode logo" class="site-logo"><span>astrocode<span>.krd</span></span></div>
   <div class="header-right">
     <div class="lang-toggle">
       <button id="lang-en" class="active" aria-pressed="true">EN</button>
