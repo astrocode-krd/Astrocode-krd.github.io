@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,966 +8,1478 @@
 <meta property="og:title" content="AstroCode — Websites & Apps">
 <meta property="og:description" content="We build websites and apps at a reasonable price. Full-stack team based in Sulaymaniyah, open for commissions.">
 <meta property="og:type" content="website">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#12151A">
 <link rel="icon" href="imgs/astrocodeLOGO.jpg" type="image/jpeg">
 <link rel="apple-touch-icon" href="imgs/astrocodeLOGO.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..700&family=Noto+Kufi+Arabic:wght@400;600;700&display=swap" rel="stylesheet">
+<script>
+  // Project screenshots: your own file in imgs/ first. If that file is missing,
+  // the page asks Microlink (microlink.io) for a live screenshot of the site instead.
+  function shotLoaded(img) {
+    if (img.naturalWidth) img.closest("[data-shot]").classList.add("is-ready");
+  }
+  function shotFailed(img) {
+    var next = img.getAttribute("data-fallback");
+    if (next) {
+      img.removeAttribute("data-fallback");
+      img.src = next;
+    } else {
+      img.closest("[data-shot]").classList.add("is-failed");
+    }
+  }
+</script>
 <style>
+  /*
+    AstroCode's original board colours: dark board, silkscreen text, copper.
+    Copper is used for the "Email us" button only (the one bright moment).
+    All spacing sits on a 4px grid.
+  */
   :root {
     --board: #12151A;
-    --board-panel: #1B1F27;
-    --board-panel-2: #232833;
-    --silkscreen: #C7CCD6;
-    --silkscreen-dim: #7C8496;
-    --copper: #B87333;
-    --copper-bright: #D89456;
-    --trace-blue: #4A7A96;
-    --text-main: #E8E6E1;
-    --border: rgba(199,204,214,0.12);
+    --board-raised: #1B1F27;
+    --board-raised-2: #232833;
+    --trace: #2A2E36;
+    --silkscreen: #E8E6E1;
+    --silkscreen-dim: #A7ADB9;
+    --copper: #D89456;
+    --copper-hover: #E3A66E;
+    --on-copper: #12151A;
+    --bezel: #0A0C0F;
+
+    --s-1: 4px;
+    --s-2: 8px;
+    --s-3: 12px;
+    --s-4: 16px;
+    --s-5: 20px;
+    --s-6: 24px;
+    --s-8: 32px;
+    --s-10: 40px;
+    --s-12: 48px;
+    --s-16: 64px;
+    --s-20: 80px;
+    --s-24: 96px;
+    --s-28: 112px;
+
+    --header-h: 64px;
+    --font: "Archivo", "Noto Kufi Arabic", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: border-box; }
+  body, h1, h2, h3, p, ul, ol, dl, dd { margin: 0; }
+  ul, ol { padding: 0; list-style: none; }
 
-  html { scroll-behavior: smooth; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
 
   body {
     background: var(--board);
-    color: var(--text-main);
-    font-family: 'Space Grotesk', sans-serif;
-    line-height: 1.5;
-    overflow-x: hidden;
-  }
-
-  .mono {
-    font-family: 'Space Mono', monospace;
-  }
-
-  .eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--copper-bright);
-  }
-
-  a { color: inherit; text-decoration: none; }
-
-  a:focus-visible,
-  button:focus-visible,
-  .btn:focus-visible,
-  .hamburger:focus-visible {
-    outline: 2px solid var(--copper-bright);
-    outline-offset: 3px;
-    border-radius: 2px;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
-    #trace-path { transition: none !important; }
-    [data-reveal] {
-      opacity: 1 !important;
-      transform: none !important;
-      transition: none !important;
-    }
-  }
-
-  /* ---------- Mobile nav ---------- */
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    gap: 5px;
-    width: 32px;
-    height: 32px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    z-index: 20;
-  }
-  .hamburger span {
-    display: block;
-    width: 100%;
-    height: 2px;
-    background: var(--silkscreen);
-    transition: transform 0.25s ease, opacity 0.25s ease;
-  }
-  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .hamburger.open span:nth-child(2) { opacity: 0; }
-  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-  .mobile-nav {
-    position: fixed;
-    top: 0; right: 0;
-    width: 70vw;
-    max-width: 320px;
-    height: 100vh;
-    background: var(--board-panel);
-    border-left: 1px solid var(--border);
-    z-index: 15;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 28px;
-    padding: 40px;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
-  }
-  .mobile-nav.open { transform: translateX(0); }
-  .mobile-nav a {
-    font-family: 'Space Mono', monospace;
-    font-size: 1rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
     color: var(--silkscreen);
+    font-family: var(--font);
+    font-size: 16px;
+    line-height: 24px;
+    -webkit-font-smoothing: antialiased;
   }
-  .mobile-nav a:hover { color: var(--copper-bright); }
-  .nav-scrim {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 14;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
-  }
-  .nav-scrim.open { opacity: 1; pointer-events: auto; }
+  body.menu-open { overflow: hidden; }
 
-  /* ---------- Background board texture ---------- */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(var(--border) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 48px 48px;
-    opacity: 0.35;
-    pointer-events: none;
-    z-index: 0;
-  }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; }
+  h1, h2, h3 { font-weight: 600; text-wrap: balance; }
+  p { text-wrap: pretty; }
 
-  /* ---------- Trace line (signature element) ---------- */
-  #trace-svg {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 100%;
-    z-index: 1;
-    pointer-events: none;
+  :focus-visible {
+    outline: 2px solid var(--silkscreen);
+    outline-offset: 4px;
   }
-  #trace-path {
-    stroke: var(--copper);
-    stroke-width: 2;
-    fill: none;
-    stroke-dasharray: 1;
-    stroke-dashoffset: 1;
-    vector-effect: non-scaling-stroke;
-  }
+  [id] { scroll-margin-top: var(--header-h); }
 
-  .node {
-    position: relative;
-    z-index: 2;
-  }
-  .node::before {
-    content: "";
+  .sr-only {
     position: absolute;
-    left: 50%;
-    top: -10px;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--copper);
-    transform: translateX(-50%);
-    box-shadow: 0 0 12px 2px rgba(184,115,51,0.5);
-    opacity: 0;
-    transition: opacity 0.4s ease;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
-  .node.lit::before { opacity: 1; }
 
-  /* ---------- Layout ---------- */
-  header {
+  .skip-link {
+    position: absolute;
+    top: var(--s-2);
+    inset-inline-start: var(--s-2);
+    z-index: 50;
+    padding: var(--s-2) var(--s-4);
+    background: var(--silkscreen);
+    color: var(--board);
+    border-radius: 4px;
+    transform: translateY(-200%);
+  }
+  .skip-link:focus { transform: none; }
+
+  .wrap {
+    width: 100%;
+    max-width: 1232px;
+    margin-inline: auto;
+    padding-inline: var(--s-5);
+  }
+
+  .text-link {
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    text-decoration-color: var(--silkscreen-dim);
+  }
+  .text-link:hover { text-decoration-color: var(--silkscreen); }
+
+  /* ---------- Side planets: wide screens only, behind everything ---------- */
+  .side-planets {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    display: none;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+  @media (min-width: 1520px) {
+    .side-planets { display: block; }
+  }
+
+  /* ---------- Header ---------- */
+  .site-header {
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 30;
+    height: var(--header-h);
+    background: var(--board);
+    border-bottom: 1px solid var(--trace);
+  }
+  .header-inner {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 22px 6vw;
-    background: rgba(18,21,26,0.85);
-    backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--border);
+    gap: var(--s-4);
+    height: 100%;
   }
   .logo {
-    font-family: 'Space Mono', monospace;
-    font-weight: 700;
-    font-size: 1.1rem;
-    letter-spacing: 0.02em;
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 600;
+    font-stretch: 112%;
+    letter-spacing: -0.01em;
+    text-decoration: none;
   }
-  .logo span { color: var(--copper-bright); }
-  .site-logo { 
-    width: 40px; }
-  nav { display: flex; gap: 36px; }
-  nav a {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.8rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--silkscreen-dim);
-    transition: color 0.2s ease;
-  }
-  nav a:hover { color: var(--copper-bright); }
+  .logo-tld { color: var(--silkscreen-dim); }
 
-  section {
-    position: relative;
-    z-index: 2;
-    padding: 120px 6vw;
-    max-width: 1180px;
-    margin: 0 auto;
+  .site-nav {
+    display: none;
+    gap: var(--s-8);
+    margin-inline-start: auto;
+  }
+  .site-nav a {
+    color: var(--silkscreen-dim);
+    text-decoration: none;
+  }
+  .site-nav a:hover { color: var(--silkscreen); }
+
+  .lang-toggle {
+    margin-inline-start: auto;
+    padding: var(--s-3) var(--s-1);
+    background: none;
+    border: 0;
+    cursor: pointer;
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 4px;
+    text-decoration-color: var(--silkscreen-dim);
+  }
+  .lang-toggle:hover { text-decoration-color: var(--silkscreen); }
+
+  .menu-button {
+    display: inline-flex;
+    align-items: center;
+    height: 40px;
+    padding: 0 var(--s-3);
+    background: none;
+    border: 1px solid var(--trace);
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .mobile-menu {
+    position: fixed;
+    top: var(--header-h);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 25;
+    padding: var(--s-2) var(--s-5) var(--s-10);
+    overflow-y: auto;
+    background: var(--board);
+  }
+  .mobile-menu a {
+    display: block;
+    padding-block: var(--s-4);
+    font-size: 24px;
+    line-height: 32px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--trace);
+  }
+
+  @media (min-width: 768px) {
+    .wrap { padding-inline: var(--s-10); }
+    .header-inner { gap: var(--s-8); }
+    .site-nav { display: flex; }
+    .lang-toggle { margin-inline-start: 0; }
+    .menu-button { display: none; }
+    .mobile-menu { display: none; }
   }
 
   /* ---------- Hero ---------- */
-  .hero { padding-top: 100px; padding-bottom: 100px; }
-  .hero .eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 22px; }
-  .hero .eyebrow::before {
-    content: "";
-    width: 8px; height: 8px;
-    background: var(--copper);
-    display: inline-block;
-    box-shadow: 0 0 8px 1px rgba(184,115,51,0.7);
+  .hero { padding-block: var(--s-10) var(--s-16); }
+  /* Phone: title, planet, text, button. Desktop: text on one side, planet on the other. */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "title" "art" "lead" "actions" "status";
   }
-  h1 {
-    font-family: 'Space Grotesk', sans-serif;
-    font-weight: 700;
-    font-size: clamp(2.4rem, 6vw, 4.6rem);
-    line-height: 1.05;
-    max-width: 14ch;
+  .hero-title { grid-area: title; }
+  .hero-grid .lead { grid-area: lead; }
+  .actions { grid-area: actions; }
+  .status { grid-area: status; }
+  .hero-art {
+    grid-area: art;
+    display: block;
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    margin-top: var(--s-4);
+  }
+  .hero-title {
+    max-width: 13em;
+    font-size: 36px;
+    line-height: 40px;
+    font-stretch: 112%;
+    letter-spacing: -0.02em;
+  }
+  .lead {
+    max-width: 36em;
+    font-size: 18px;
+    line-height: 28px;
+    color: var(--silkscreen-dim);
+  }
+  .hero .lead { margin-top: var(--s-6); }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-4) var(--s-8);
+    margin-top: var(--s-10);
+  }
+  .button {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: var(--s-3) var(--s-6);
+    background: var(--copper);
+    color: var(--on-copper);
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+  .button:hover { background: var(--copper-hover); }
+  .status {
+    margin-top: var(--s-8);
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--silkscreen-dim);
+  }
+
+  /* ---------- Sections ---------- */
+  .section {
+    padding-block: var(--s-16);
+    border-top: 1px solid var(--trace);
+  }
+  /* The work follows straight on from the hero: it is the proof of the headline */
+  .hero + .section {
+    padding-top: 0;
+    border-top: 0;
+  }
+  #work { scroll-margin-top: calc(var(--header-h) + var(--s-8)); }
+  .section-title {
+    font-size: 28px;
+    line-height: 32px;
+    font-stretch: 112%;
     letter-spacing: -0.01em;
   }
-  h1 em {
-    font-style: normal;
-    color: var(--copper-bright);
-  }
-  .hero p.sub {
-    margin-top: 26px;
-    max-width: 52ch;
-    color: var(--silkscreen);
-    font-size: 1.08rem;
-  }
-  .hero-meta {
-    margin-top: 48px;
-    display: flex;
-    gap: 40px;
-    flex-wrap: wrap;
-  }
-  .spec {
-    border-left: 2px solid var(--border);
-    padding-left: 14px;
-  }
-  .spec .label {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--copper-bright);
-    font-weight: 700;
-  }
-  .spec .value {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.95rem;
-    color: var(--text-main);
-    margin-top: 6px;
-  }
-
-  /* ---------- Section headers ---------- */
-  .section-head {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 56px;
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 20px;
-  }
-  .section-head h2 {
-    font-size: clamp(1.6rem, 3vw, 2.2rem);
-    font-weight: 600;
-  }
-  .section-head .eyebrow { margin: 0; }
-
-  /* ---------- Services / modules ---------- */
-  .modules {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 24px;
-  }
-  .module {
-    background: var(--board-panel);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 32px;
-    position: relative;
-  }
-  .module::before {
-    content: attr(data-pin);
-    position: absolute;
-    top: -1px; left: 24px;
-    transform: translateY(-50%);
-    background: var(--board);
-    padding: 0 8px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    color: var(--copper);
-  }
-  .module h3 {
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 12px;
-  }
-  .module p {
-    color: var(--silkscreen);
-    font-size: 0.96rem;
-  }
-  .module ul {
-    margin-top: 18px;
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  .module li {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem;
+  .section-intro {
+    max-width: 32em;
+    margin-top: var(--s-3);
     color: var(--silkscreen-dim);
-    border: 1px solid var(--border);
-    padding: 4px 10px;
-    border-radius: 3px;
   }
 
-  /* ---------- Work grid ---------- */
-  .work-grid {
+  .split {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 28px;
+    gap: var(--s-8);
   }
-  .project-card {
-    background: var(--board-panel);
-    border: 1px solid var(--border);
-    border-radius: 4px;
+
+  /* ---------- Work ---------- */
+  .work-head { margin-bottom: var(--s-12); }
+  .work-list {
+    display: grid;
+    gap: var(--s-20);
+  }
+  .project {
+    display: grid;
+    gap: var(--s-8);
+    align-items: center;
+  }
+
+  /* Each project: the desktop site in a browser window, the phone version on top of it */
+  .project-media {
+    position: relative;
+    padding-bottom: var(--s-6);
+  }
+  .browser {
+    display: block;
     overflow: hidden;
-    transition: border-color 0.25s ease, transform 0.25s ease;
+    background: var(--board-raised);
+    border: 1px solid var(--trace);
+    border-radius: 8px;
+    text-decoration: none;
   }
-  .project-card:hover {
-    border-color: var(--copper);
-    transform: translateY(-4px);
-  }
-  .card-top {
-    aspect-ratio: 16/10;
-    background:
-      repeating-linear-gradient(45deg, var(--board-panel-2) 0 2px, transparent 2px 14px);
+  .browser-bar {
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-bottom: 1px solid var(--border);
+    height: 32px;
+    padding-inline: var(--s-3);
+    background: var(--board-raised-2);
+    border-bottom: 1px solid var(--trace);
   }
-  .card-top span {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
+  .browser-address {
+    max-width: 100%;
+    overflow: hidden;
+    padding-inline: var(--s-2);
+    font-size: 12px;
+    line-height: 20px;
     color: var(--silkscreen-dim);
-    text-transform: uppercase;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    background: var(--board);
+    border-radius: 4px;
   }
-  .card-top img {
+  .browser-view {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+  }
+  .browser-view img,
+  .phone-screen img {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    display: block;
+    object-position: top;
+    opacity: 0;
   }
-  .card-body { padding: 24px; }
-  .card-body h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; }
-  .card-body p { color: var(--silkscreen); font-size: 0.9rem; margin-bottom: 16px; }
-  .card-meta {
-    display: flex;
-    justify-content: space-between;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.68rem;
+  .is-ready img { opacity: 1; }
+  .browser-fallback {
+    position: absolute;
+    inset-inline: var(--s-6);
+    inset-block-end: var(--s-6);
+    font-size: 24px;
+    line-height: 32px;
+    font-weight: 600;
+    font-stretch: 112%;
     color: var(--silkscreen-dim);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    border-top: 1px solid var(--border);
-    padding-top: 14px;
   }
+  .browser-view.is-ready .browser-fallback { display: none; }
 
-  /* ---------- Process ---------- */
-  .process-list {
-    display: flex;
-    flex-direction: column;
+  .phone {
+    position: absolute;
+    bottom: 0;
+    inset-inline-end: var(--s-4);
+    width: clamp(88px, 24%, 176px);
+    padding: var(--s-1);
+    background: var(--bezel);
+    border: 1px solid var(--trace);
+    border-radius: 16px;
+    outline: 4px solid var(--board);
+    visibility: hidden;
   }
-  .process-item {
-    display: grid;
-    grid-template-columns: 90px 1fr;
-    gap: 28px;
-    padding: 28px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .process-item:first-child { padding-top: 0; }
-  .process-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.85rem;
-    color: var(--copper);
-  }
-  .process-item h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 6px; }
-  .process-item p { color: var(--silkscreen); font-size: 0.92rem; max-width: 56ch; }
-
-  /* ---------- Duo ---------- */
-  .duo-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-  @media (max-width: 980px) {
-    .duo-grid { grid-template-columns: repeat(2, 1fr); }
-  }
-  .person-card {
-    background: var(--board-panel);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 28px;
-  }
-  .person-avatar {
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    background: var(--board-panel-2);
-    border: 1px solid var(--border);
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Space Mono', monospace;
-    color: var(--copper);
-    font-size: 0.85rem;
-  }
-  .person-card h3 { font-size: 1.1rem; margin-bottom: 4px; }
-  .person-card .role {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--copper-bright);
-    margin-bottom: 14px;
+  .phone.is-ready { visibility: visible; }
+  .phone-screen {
+    position: relative;
     display: block;
+    aspect-ratio: 390 / 844;
+    overflow: hidden;
+    background: var(--board-raised);
+    border-radius: 12px;
   }
-  .person-card p { color: var(--silkscreen); font-size: 0.9rem; }
+
+  .project-name {
+    font-size: 24px;
+    line-height: 32px;
+    font-stretch: 112%;
+    letter-spacing: -0.01em;
+  }
+  .project-text {
+    max-width: 34em;
+    margin-top: var(--s-3);
+    color: var(--silkscreen-dim);
+  }
+  .project-link {
+    display: inline-block;
+    margin-top: var(--s-4);
+  }
+
+  /* ---------- Services ---------- */
+  .services {
+    display: grid;
+    gap: var(--s-12);
+  }
+  .service-title {
+    font-size: 24px;
+    line-height: 32px;
+    font-stretch: 112%;
+    letter-spacing: -0.01em;
+  }
+  .service-text {
+    max-width: 30em;
+    margin-top: var(--s-3);
+    color: var(--silkscreen-dim);
+  }
+  .service-list {
+    display: grid;
+    gap: var(--s-2);
+    margin-top: var(--s-6);
+  }
+
+  /* ---------- Process (a real sequence, so it is numbered) ---------- */
+  .steps {
+    display: grid;
+    gap: var(--s-8);
+    counter-reset: step;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: var(--s-10) minmax(0, 1fr);
+    column-gap: var(--s-4);
+    counter-increment: step;
+  }
+  .step::before {
+    content: counter(step);
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 600;
+    font-stretch: 112%;
+    color: var(--silkscreen-dim);
+  }
+  .step-title {
+    font-size: 20px;
+    line-height: 28px;
+  }
+  .step-text {
+    max-width: 36em;
+    margin-top: var(--s-2);
+    color: var(--silkscreen-dim);
+  }
+
+  /* ---------- Team ---------- */
+  .people { border-top: 1px solid var(--trace); }
+  .person {
+    display: grid;
+    gap: var(--s-1);
+    padding-block: var(--s-6);
+    border-bottom: 1px solid var(--trace);
+  }
+  .person-name {
+    font-size: 20px;
+    line-height: 28px;
+  }
+  .person-role,
+  .person-stack { color: var(--silkscreen-dim); }
 
   /* ---------- Contact ---------- */
-  .contact-panel {
-    background: var(--board-panel);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 64px 6vw;
-    text-align: center;
-    position: relative;
+  .contact-text {
+    max-width: 32em;
+    font-size: 18px;
+    line-height: 28px;
   }
-  .contact-panel h2 {
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
-    font-weight: 700;
-    max-width: 18ch;
-    margin: 0 auto 20px;
+  .contact .button { margin-top: var(--s-8); }
+  .contact-list {
+    display: grid;
+    gap: var(--s-3);
+    margin-top: var(--s-10);
   }
-  .contact-panel p {
-    color: var(--silkscreen);
-    max-width: 46ch;
-    margin: 0 auto 32px;
+  .contact-list div {
+    display: grid;
+    grid-template-columns: 96px minmax(0, 1fr);
+    gap: var(--s-4);
   }
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--copper);
-    color: var(--board);
-    font-family: 'Space Mono', monospace;
-    font-size: 0.82rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 14px 28px;
-    border-radius: 3px;
-    font-weight: 700;
-    transition: background 0.2s ease;
-  }
-  .btn:hover { background: var(--copper-bright); }
+  .contact-list dt { color: var(--silkscreen-dim); }
 
-  .btn-ig {
-    background: linear-gradient(45deg, #4f5bd5, #962fbf, #d62976, #fa7e1e, #feda75);
-    color: #fff;
-    font-weight: 700;
-  }
-  .btn-ig:hover {
-    filter: brightness(1.1);
-    background: linear-gradient(45deg, #4f5bd5, #962fbf, #d62976, #fa7e1e, #feda75);
-  }
-
-  /* ---------- Language toggle ---------- */
-  .lang-toggle {
-    display: flex;
-    align-items: center;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    overflow: hidden;
-    margin-right: 20px;
-  }
-  .lang-toggle button {
-    background: none;
-    border: none;
+  /* ---------- Footer ---------- */
+  .site-footer {
+    padding-block: var(--s-8) var(--s-12);
+    font-size: 14px;
+    line-height: 20px;
     color: var(--silkscreen-dim);
-    padding: 6px 14px;
-    cursor: pointer;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-    transition: background 0.2s ease, color 0.2s ease;
+    border-top: 1px solid var(--trace);
   }
-  .lang-toggle button.active {
-    background: var(--copper);
-    color: var(--board);
-    font-weight: 700;
-  }
-  .header-right {
+  .footer-inner {
     display: flex;
-    align-items: center;
-  }
-
-  /* Kurdish text handling — scoped to translated text only, layout stays LTR */
-  body.lang-ku [data-i18n] {
-    font-family: 'Noto Kufi Arabic', sans-serif;
-    direction: rtl;
-    unicode-bidi: isolate;
-  }
-  body.lang-ku .hero .sub,
-  body.lang-ku h1,
-  body.lang-ku .module p,
-  body.lang-ku .process-item p {
-    text-align: right;
-  }
-  body.lang-ku h1 {
-    font-size: clamp(1.9rem, 5.2vw, 3.4rem);
-    line-height: 1.7;
-  }
-  body.lang-ku .hero .sub {
-    line-height: 1.9;
-  }
-  body.lang-ku .spec .label {
-    font-size: 0.85rem;
-  }
-
-  footer {
-    padding: 40px 6vw 60px;
-    display: flex;
-    justify-content: space-between;
     flex-wrap: wrap;
-    gap: 16px;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--silkscreen-dim);
-    letter-spacing: 0.04em;
-    position: relative;
-    z-index: 2;
+    justify-content: space-between;
+    gap: var(--s-4) var(--s-8);
   }
-  footer a:hover { color: var(--copper-bright); }
-
-  @media (max-width: 760px) {
-    .modules, .work-grid, .duo-grid { grid-template-columns: 1fr; }
-    nav.desktop-nav { display: none; }
-    .hamburger { display: flex; }
-    section { padding: 80px 6vw; }
-    .process-item { grid-template-columns: 50px 1fr; gap: 16px; }
+  .footer-links {
+    display: flex;
+    gap: var(--s-6);
   }
 
-  [data-reveal] {
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+  /* ---------- Larger screens ---------- */
+  @media (min-width: 768px) {
+    .hero { padding-block: var(--s-24); }
+    .hero-title {
+      font-size: 56px;
+      line-height: 60px;
+    }
+    .lead {
+      font-size: 20px;
+      line-height: 32px;
+    }
+    .section { padding-block: var(--s-20); }
+    .section-title {
+      font-size: 40px;
+      line-height: 44px;
+    }
+    .phone { inset-inline-end: var(--s-6); }
+    /* Both service columns share rows, so the two lists start on the same line */
+    .services {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto auto auto;
+      gap: 0 var(--s-8);
+    }
+    .service {
+      display: grid;
+      grid-row: span 3;
+      grid-template-rows: subgrid;
+    }
+    .person {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+      column-gap: var(--s-8);
+    }
+    .person-name,
+    .person-role { grid-column: 1; }
+    .person-stack {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+      line-height: 28px;
+    }
   }
-  [data-reveal].visible {
-    opacity: 1;
-    transform: translateY(0);
+
+  @media (min-width: 1024px) {
+    .split {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+      column-gap: var(--s-8);
+    }
+    .work-list { gap: var(--s-24); }
+    .project {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      column-gap: var(--s-12);
+    }
+    .section { padding-block: var(--s-24); }
+  }
+
+  @media (min-width: 900px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      grid-template-rows: auto auto auto 1fr;
+      grid-template-areas:
+        "title art"
+        "lead art"
+        "actions art"
+        "status art";
+      column-gap: var(--s-8);
+    }
+    .hero-art {
+      align-self: center;
+      aspect-ratio: 1 / 1;
+      margin-top: 0;
+    }
+    .hero-title {
+      font-size: 48px;
+      line-height: 52px;
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .hero-title {
+      font-size: 64px;
+      line-height: 68px;
+    }
+  }
+
+  /* ---------- Kurdish (Sorani): page turns right-to-left ---------- */
+  :lang(ckb) body { line-height: 32px; }
+  :lang(ckb) .hero-title,
+  :lang(ckb) .section-title,
+  :lang(ckb) .service-title,
+  :lang(ckb) .project-name,
+  :lang(ckb) .logo { letter-spacing: 0; }
+  :lang(ckb) .hero-title {
+    max-width: 18em;
+    font-size: 32px;
+    line-height: 56px;
+    font-weight: 700;
+  }
+  :lang(ckb) .lead,
+  :lang(ckb) .contact-text {
+    font-size: 18px;
+    line-height: 36px;
+  }
+  :lang(ckb) .section-title {
+    font-size: 24px;
+    line-height: 44px;
+    font-weight: 700;
+  }
+  :lang(ckb) .service-title { line-height: 44px; }
+  :lang(ckb) .project-name,
+  :lang(ckb) .step-title,
+  :lang(ckb) .person-name { line-height: 36px; }
+  :lang(ckb) .step::before {
+    content: counter(step, arabic-indic);
+    line-height: 36px;
+  }
+  :lang(ckb) .status,
+  :lang(ckb) .site-footer { line-height: 28px; }
+  :lang(ckb) .text-link { text-underline-offset: 8px; }
+  :lang(ckb) .mobile-menu a { line-height: 40px; }
+
+  @media (min-width: 768px) {
+    :lang(ckb) .hero-title {
+      font-size: 44px;
+      line-height: 76px;
+    }
+    :lang(ckb) .lead,
+    :lang(ckb) .contact-text {
+      font-size: 20px;
+      line-height: 40px;
+    }
+    :lang(ckb) .section-title {
+      font-size: 32px;
+      line-height: 56px;
+    }
+    :lang(ckb) .person-stack { line-height: 36px; }
+  }
+  @media (min-width: 900px) {
+    :lang(ckb) .hero-title {
+      font-size: 40px;
+      line-height: 72px;
+    }
+  }
+  @media (min-width: 1200px) {
+    :lang(ckb) .hero-title {
+      font-size: 48px;
+      line-height: 84px;
+    }
   }
 </style>
 </head>
 <body>
 
-<svg id="trace-svg" preserveAspectRatio="none">
-  <path id="trace-path" d="M1,0 L1,1" vector-effect="non-scaling-stroke"></path>
-</svg>
+<canvas class="side-planets" id="side-planets" aria-hidden="true"></canvas>
 
-<header>
-  <div class="logo">astrocode<span>.krd</span></div>
-  <div class="header-right">
-    <div class="lang-toggle">
-      <button id="lang-en" class="active" aria-pressed="true">EN</button>
-      <button id="lang-ku" aria-pressed="false">KU</button>
-    </div>
-    <nav class="desktop-nav">
+<a class="skip-link" href="#main"><span data-i18n="skip">Skip to content</span></a>
+
+<header class="site-header">
+  <div class="wrap header-inner">
+    <a class="logo" href="#top" dir="ltr">astrocode<span class="logo-tld">.krd</span></a>
+    <nav class="site-nav" aria-label="Main" data-i18n-label="nav_label">
       <a href="#work" data-i18n="nav_work">Work</a>
       <a href="#services" data-i18n="nav_services">Services</a>
       <a href="#process" data-i18n="nav_process">Process</a>
-      <a href="#duo" data-i18n="nav_team">Team</a>
+      <a href="#team" data-i18n="nav_team">Team</a>
       <a href="#contact" data-i18n="nav_contact">Contact</a>
     </nav>
-    <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
-      <span></span><span></span><span></span>
-    </button>
+    <button class="lang-toggle" id="lang-toggle" type="button" lang="ckb">کوردی</button>
+    <button class="menu-button" id="menu-button" type="button" aria-expanded="false" aria-controls="mobile-menu">Menu</button>
   </div>
 </header>
 
-<div class="nav-scrim" id="nav-scrim"></div>
-<nav class="mobile-nav" id="mobile-nav">
+<nav class="mobile-menu" id="mobile-menu" aria-label="Main" data-i18n-label="nav_label" hidden>
   <a href="#work" data-i18n="nav_work">Work</a>
   <a href="#services" data-i18n="nav_services">Services</a>
   <a href="#process" data-i18n="nav_process">Process</a>
-  <a href="#duo" data-i18n="nav_team">Team</a>
+  <a href="#team" data-i18n="nav_team">Team</a>
   <a href="#contact" data-i18n="nav_contact">Contact</a>
 </nav>
 
-<section class="hero node" id="top">
-  <div class="eyebrow" data-i18n="hero_eyebrow">Sulaymaniyah, IQ — Est. 2026</div>
-  <h1 data-i18n="hero_h1">We build <em>high-caliber websites and apps</em> at accessible prices.</h1>
-  <p class="sub" data-i18n="hero_sub">One dedicated team, zero hand-off friction. We design, build, and launch full-stack web, mobile, and desktop products — guiding your project from wireframe to the final interactive interface.</p>
-  <div class="hero-meta">
-    <div class="spec">
-      <div class="label" data-i18n="spec_stack_label">Stack</div>
-      <div class="value">Web · Mobile · Backend</div>
-    </div>
-    <div class="spec">
-      <div class="label" data-i18n="spec_status_label">Status</div>
-      <div class="value" data-i18n="spec_status_value">Currently accepting new projects</div>
-    </div>
-    <div class="spec">
-      <div class="label" data-i18n="spec_turnaround_label">Turnaround</div>
-      <div class="value">2–6 weeks / project</div>
-    </div>
-  </div>
-</section>
+<main id="main">
 
-<section id="services" class="node">
-  <div class="section-head">
-    <h2 data-i18n="services_h2">Capabilities</h2>
-    <div class="eyebrow">02 — Modules</div>
-  </div>
-  <div class="modules">
-    <div class="module" data-pin="U1 · WEB">
-      <h3 data-i18n="services_web_h3">Websites</h3>
-      <p data-i18n="services_web_p">From marketing sites to full storefronts — engineered for speed, responsiveness, and visibility from day one.</p>
-      <ul>
-        <li>Landing pages</li>
-        <li>Portfolio sites</li>
-        <li>Small e-commerce</li>
+  <section class="hero" id="top">
+    <div class="wrap hero-grid">
+      <h1 class="hero-title" data-i18n="hero_h1">We build websites and apps for businesses in Kurdistan.</h1>
+      <canvas class="hero-art" id="hero-art" aria-hidden="true"></canvas>
+      <p class="lead" data-i18n="hero_lead">AstroCode is three developers in Sulaymaniyah. We design, build and launch your website or app ourselves, at a price that works for a small business. You talk directly to the people writing the code.</p>
+      <div class="actions">
+        <a class="button" href="mailto:darvanjabar@gmail.com" data-i18n="cta">Email us about your project</a>
+        <a class="text-link" href="#work" data-i18n="hero_work_link">See our work</a>
+      </div>
+      <p class="status" data-i18n="hero_status">Taking new projects now. Most take 2–6 weeks.</p>
+    </div>
+  </section>
+
+  <section class="section" id="work" aria-labelledby="work-title">
+    <div class="wrap">
+      <div class="work-head">
+        <h2 class="section-title" id="work-title" data-i18n="work_h2">Selected work</h2>
+        <p class="section-intro" data-i18n="work_intro">Client sites we built in 2026.</p>
+      </div>
+      <ul class="work-list">
+        <li class="project">
+          <div class="project-media">
+            <a class="browser" href="https://astrocode-krd.github.io/asia-vet-hospital/index.html" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+              <span class="browser-bar"><span class="browser-address" dir="ltr">astrocode-krd.github.io/asia-vet-hospital</span></span>
+              <span class="browser-view" data-shot>
+                <span class="browser-fallback"><bdi>Asia Vet Hospital</bdi></span>
+                <img src="imgs/asia-vet-hospital.png" data-fallback="https://api.microlink.io/?url=https%3A%2F%2Fastrocode-krd.github.io%2Fasia-vet-hospital%2Findex.html&amp;screenshot=true&amp;meta=false&amp;embed=screenshot.url&amp;screenshot.type=jpeg&amp;viewport.width=1280&amp;viewport.height=800" onload="shotLoaded(this)" onerror="shotFailed(this)" loading="lazy" alt="">
+              </span>
+            </a>
+            <span class="phone" data-shot aria-hidden="true">
+              <span class="phone-screen">
+                <img src="imgs/asia-vet-hospital-phone.png" data-fallback="https://api.microlink.io/?url=https%3A%2F%2Fastrocode-krd.github.io%2Fasia-vet-hospital%2Findex.html&amp;screenshot=true&amp;meta=false&amp;embed=screenshot.url&amp;screenshot.type=jpeg&amp;viewport.width=390&amp;viewport.height=844&amp;viewport.deviceScaleFactor=2&amp;viewport.isMobile=true" onload="shotLoaded(this)" onerror="shotFailed(this)" loading="lazy" alt="">
+              </span>
+            </span>
+          </div>
+          <div class="project-body">
+            <h3 class="project-name"><bdi>Asia Vet Hospital</bdi></h3>
+            <p class="project-text" data-i18n="work_asia">Six-page site for a vet hospital in Sulaymaniyah, with services, lab tests, the team and tap-to-call, in English, Kurdish and Arabic.</p>
+            <a class="text-link project-link" href="https://astrocode-krd.github.io/asia-vet-hospital/index.html" target="_blank" rel="noopener noreferrer"><span data-i18n="visit">Visit site</span><span class="sr-only">: Asia Vet Hospital <span data-i18n="new_tab">(opens in a new tab)</span></span></a>
+          </div>
+        </li>
+        <li class="project">
+          <div class="project-media">
+            <a class="browser" href="https://www.daroon.krd/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+              <span class="browser-bar"><span class="browser-address" dir="ltr">daroon.krd</span></span>
+              <span class="browser-view" data-shot>
+                <span class="browser-fallback"><bdi>Daroon</bdi></span>
+                <img src="imgs/daroon.png" data-fallback="https://api.microlink.io/?url=https%3A%2F%2Fwww.daroon.krd%2F&amp;screenshot=true&amp;meta=false&amp;embed=screenshot.url&amp;screenshot.type=jpeg&amp;viewport.width=1280&amp;viewport.height=800" onload="shotLoaded(this)" onerror="shotFailed(this)" loading="lazy" alt="">
+              </span>
+            </a>
+            <span class="phone" data-shot aria-hidden="true">
+              <span class="phone-screen">
+                <img src="imgs/daroon-phone.png" data-fallback="https://api.microlink.io/?url=https%3A%2F%2Fwww.daroon.krd%2F&amp;screenshot=true&amp;meta=false&amp;embed=screenshot.url&amp;screenshot.type=jpeg&amp;viewport.width=390&amp;viewport.height=844&amp;viewport.deviceScaleFactor=2&amp;viewport.isMobile=true" onload="shotLoaded(this)" onerror="shotFailed(this)" loading="lazy" alt="">
+              </span>
+            </span>
+          </div>
+          <div class="project-body">
+            <h3 class="project-name"><bdi>Daroon</bdi></h3>
+            <p class="project-text" data-i18n="work_daroon">Platform for finding a mental-health doctor or therapist and booking an appointment.</p>
+            <a class="text-link project-link" href="https://www.daroon.krd/" target="_blank" rel="noopener noreferrer"><span data-i18n="visit">Visit site</span><span class="sr-only">: Daroon <span data-i18n="new_tab">(opens in a new tab)</span></span></a>
+          </div>
+        </li>
+        <li class="project">
+          <div class="project-media">
+            <a class="browser" href="https://new.epu.edu.iq/en" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+              <span class="browser-bar"><span class="browser-address" dir="ltr">new.epu.edu.iq</span></span>
+              <span class="browser-view" data-shot>
+                <span class="browser-fallback"><bdi>EPU</bdi></span>
+                <img src="imgs/EPU.png" data-fallback="https://api.microlink.io/?url=https%3A%2F%2Fnew.epu.edu.iq%2Fen&amp;screenshot=true&amp;meta=false&amp;embed=screenshot.url&amp;screenshot.type=jpeg&amp;viewport.width=1280&amp;viewport.height=800" onload="shotLoaded(this)" onerror="shotFailed(this)" loading="lazy" alt="">
+              </span>
+            </a>
+            <span class="phone" data-shot aria-hidden="true">
+              <span class="phone-screen">
+                <img src="imgs/EPU-phone.png" data-fallback="https://api.microlink.io/?url=https%3A%2F%2Fnew.epu.edu.iq%2Fen&amp;screenshot=true&amp;meta=false&amp;embed=screenshot.url&amp;screenshot.type=jpeg&amp;viewport.width=390&amp;viewport.height=844&amp;viewport.deviceScaleFactor=2&amp;viewport.isMobile=true" onload="shotLoaded(this)" onerror="shotFailed(this)" loading="lazy" alt="">
+              </span>
+            </span>
+          </div>
+          <div class="project-body">
+            <h3 class="project-name"><bdi>EPU</bdi></h3>
+            <p class="project-text" data-i18n="work_epu">New official site for Erbil Polytechnic University in English, Kurdish and Arabic, covering its colleges, institutes, academic staff and international partnerships.</p>
+            <a class="text-link project-link" href="https://new.epu.edu.iq/en" target="_blank" rel="noopener noreferrer"><span data-i18n="visit">Visit site</span><span class="sr-only">: EPU <span data-i18n="new_tab">(opens in a new tab)</span></span></a>
+          </div>
+        </li>
+        <li class="project">
+          <div class="project-media">
+            <a class="browser" href="https://www.platinum-agency.net/" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+              <span class="browser-bar"><span class="browser-address" dir="ltr">platinum-agency.net</span></span>
+              <span class="browser-view" data-shot>
+                <span class="browser-fallback"><bdi>Platinum</bdi></span>
+                <img src="imgs/platinum.png" data-fallback="https://api.microlink.io/?url=https%3A%2F%2Fwww.platinum-agency.net%2F&amp;screenshot=true&amp;meta=false&amp;embed=screenshot.url&amp;screenshot.type=jpeg&amp;viewport.width=1280&amp;viewport.height=800" onload="shotLoaded(this)" onerror="shotFailed(this)" loading="lazy" alt="">
+              </span>
+            </a>
+            <span class="phone" data-shot aria-hidden="true">
+              <span class="phone-screen">
+                <img src="imgs/platinum-phone.png" data-fallback="https://api.microlink.io/?url=https%3A%2F%2Fwww.platinum-agency.net%2F&amp;screenshot=true&amp;meta=false&amp;embed=screenshot.url&amp;screenshot.type=jpeg&amp;viewport.width=390&amp;viewport.height=844&amp;viewport.deviceScaleFactor=2&amp;viewport.isMobile=true" onload="shotLoaded(this)" onerror="shotFailed(this)" loading="lazy" alt="">
+              </span>
+            </span>
+          </div>
+          <div class="project-body">
+            <h3 class="project-name"><bdi>Platinum</bdi></h3>
+            <p class="project-text" data-i18n="work_platinum">Site for an interior and furniture design studio, showing the custom interiors it designs for homes and businesses.</p>
+            <a class="text-link project-link" href="https://www.platinum-agency.net/" target="_blank" rel="noopener noreferrer"><span data-i18n="visit">Visit site</span><span class="sr-only">: Platinum <span data-i18n="new_tab">(opens in a new tab)</span></span></a>
+          </div>
+        </li>
       </ul>
     </div>
-    <div class="module" data-pin="U2 · APP">
-      <h3 data-i18n="services_app_h3">Apps</h3>
-      <p data-i18n="services_app_p">Mobile and desktop applications built for real-world workflows, from internal tools to consumer-facing products.</p>
-      <ul>
-        <li>Android / Flutter</li>
-        <li>Desktop utilities</li>
-        <li>Database-backed tools</li>
+  </section>
+
+  <section class="section" id="services" aria-labelledby="services-title">
+    <div class="wrap split">
+      <div>
+        <h2 class="section-title" id="services-title" data-i18n="services_h2">What we build</h2>
+        <p class="section-intro" data-i18n="services_intro">Websites, mobile and desktop apps, and the servers and databases behind them.</p>
+      </div>
+      <div class="services">
+        <div class="service">
+          <h3 class="service-title" data-i18n="web_h3">Websites</h3>
+          <p class="service-text" data-i18n="web_p">Sites that load fast, work well on phones and are set up so people can find you on Google.</p>
+          <ul class="service-list">
+            <li data-i18n="web_1">Landing pages</li>
+            <li data-i18n="web_2">Portfolio sites</li>
+            <li data-i18n="web_3">Small online shops</li>
+          </ul>
+        </div>
+        <div class="service">
+          <h3 class="service-title" data-i18n="app_h3">Apps</h3>
+          <p class="service-text" data-i18n="app_p">Mobile and desktop apps for real work, from tools your staff use every day to apps for your customers.</p>
+          <ul class="service-list">
+            <li data-i18n="app_1">Android and Flutter apps</li>
+            <li data-i18n="app_2">Desktop utilities</li>
+            <li data-i18n="app_3">Database-backed tools</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="process" aria-labelledby="process-title">
+    <div class="wrap split">
+      <div>
+        <h2 class="section-title" id="process-title" data-i18n="process_h2">How we work</h2>
+      </div>
+      <ol class="steps">
+        <li class="step">
+          <div>
+            <h3 class="step-title" data-i18n="step_1_h3">We talk</h3>
+            <p class="step-text" data-i18n="step_1_p">We start with a conversation about what you need, who it's for, your budget and your deadline. Plain language, and we won't sell you extras you don't need.</p>
+          </div>
+        </li>
+        <li class="step">
+          <div>
+            <h3 class="step-title" data-i18n="step_2_h3">We design</h3>
+            <p class="step-text" data-i18n="step_2_p">We plan the pages and the look before writing any code, so you see what you're getting before we build it.</p>
+          </div>
+        </li>
+        <li class="step">
+          <div>
+            <h3 class="step-title" data-i18n="step_3_h3">We build</h3>
+            <p class="step-text" data-i18n="step_3_p">We build it and show you working previews as we go, so you can ask for changes early.</p>
+          </div>
+        </li>
+        <li class="step">
+          <div>
+            <h3 class="step-title" data-i18n="step_4_h3">We launch</h3>
+            <p class="step-text" data-i18n="step_4_p">We put it online, hand over everything you need to maintain it, and stay reachable after launch.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" id="team" aria-labelledby="team-title">
+    <div class="wrap split">
+      <div>
+        <h2 class="section-title" id="team-title" data-i18n="team_h2">The team</h2>
+        <p class="section-intro" data-i18n="team_intro">We started AstroCode in 2026.</p>
+      </div>
+      <ul class="people">
+        <li class="person">
+          <h3 class="person-name"><bdi>Rahand Hemn</bdi></h3>
+          <p class="person-role" data-i18n="role">Full-stack developer</p>
+          <p class="person-stack"><span dir="ltr">Web, C#, Python, JavaScript, Dart, SQL, MySQL</span></p>
+        </li>
+        <li class="person">
+          <h3 class="person-name"><bdi>Sarkar Salar</bdi></h3>
+          <p class="person-role" data-i18n="role">Full-stack developer</p>
+          <p class="person-stack"><span dir="ltr">Web, C#, C++, Python</span></p>
+        </li>
+        <li class="person">
+          <h3 class="person-name"><bdi>Muhammed Omer</bdi></h3>
+          <p class="person-role" data-i18n="role">Full-stack developer</p>
+          <!-- Add Muhammed's stack here when you have it, e.g.
+          <p class="person-stack"><span dir="ltr">Web, C#, Python, JavaScript</span></p> -->
+        </li>
       </ul>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="work" class="node">
-  <div class="section-head">
-    <h2 data-i18n="work_h2">Selected Work</h2>
-    <div class="eyebrow">03 — Log</div>
-  </div>
-  <div class="work-grid">
-    <div class="project-card">
-      <div class="card-top"><a href="https://astrocode-krd.github.io/asia-vet-hospital/index.html" target="_blank" rel="noopener noreferrer"><img src="imgs/asia-vet-hospital.png" alt="Asia Vet Hospital screenshot"></a></div>
-      <div class="card-body">
-        <h3>Asia Vet Hospital</h3>
-        <p>[Veterinary clinic site listing services, clinic info, and appointment/contact details for pet care.]</p>
-        <div class="card-meta"><span>[Client]</span><span>[2026]</span></div>
-      </div>
-    </div>
-    <div class="project-card">
-      <div class="card-top"><a href="https://www.daroon.krd/" target="_blank" rel="noopener noreferrer"><img src="imgs/daroon.png" alt="Daroon screenshot"></a></div>
-      <div class="card-body">
-        <h3>Daroon</h3>
-        <p>[Online healthcare platform to find and book therapists and mental-health services.]</p>
-        <div class="card-meta"><span>[Client]</span><span>[2026]</span></div>
-      </div>
-    </div>
-    <div class="project-card">
-      <div class="card-top"><a href="https://new.epu.edu.iq/en" target="_blank" rel="noopener noreferrer"><img src="imgs/EPU.png" alt="EPU screenshot"></a></div>
-      <div class="card-body">
-        <h3>EPU</h3>
-        <p>[Official university site with news, admissions, programs, and student resources for Erbil Polytechnic University.]</p>
-        <div class="card-meta"><span>[Client]</span><span>[2026]</span></div>
-      </div>
-    </div>
-    <div class="project-card">
-      <div class="card-top"><a href="https://www.platinum-agency.net/" target="_blank" rel="noopener noreferrer"><img src="imgs/platinum.png" alt="Platinum screenshot"></a></div>
-      <div class="card-body">
-        <h3>Platinum</h3>
-        <p>[Interior & furniture design studio creating bespoke residential and commercial interiors.]</p>
-        <div class="card-meta"><span>[Client]</span><span>[2026]</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="process" class="node">
-  <div class="section-head">
-    <h2 data-i18n="process_h2">Our Process</h2>
-    <div class="eyebrow">04 — Sequence</div>
-  </div>
-  <div class="process-list">
-    <div class="process-item">
-      <div class="process-num">01</div>
+  <section class="section contact" id="contact" aria-labelledby="contact-title">
+    <div class="wrap split">
       <div>
-        <h3 data-i18n="process_1_h3">Discovery</h3>
-        <p data-i18n="process_1_p">We start with a focused conversation to define your goals, audience, budget, and timeline — no jargon, no upselling.</p>
+        <h2 class="section-title" id="contact-title" data-i18n="contact_h2">Have a project in mind?</h2>
       </div>
-    </div>
-    <div class="process-item">
-      <div class="process-num">02</div>
       <div>
-        <h3 data-i18n="process_2_h3">Design</h3>
-        <p data-i18n="process_2_p">We map the structure and visual direction before a single line of code is written, so the final build holds no surprises.</p>
+        <p class="contact-text" data-i18n="contact_p">Tell us what you want to build. We'll reply with a clear plan and timeline, with no obligation.</p>
+        <a class="button" href="mailto:darvanjabar@gmail.com" data-i18n="cta">Email us about your project</a>
+        <dl class="contact-list">
+          <div>
+            <dt data-i18n="contact_email">Email</dt>
+            <dd><a class="text-link" href="mailto:darvanjabar@gmail.com" dir="ltr">darvanjabar@gmail.com</a></dd>
+          </div>
+          <div>
+            <dt data-i18n="contact_phone">Phone</dt>
+            <dd><a class="text-link" href="tel:+9647721547883" dir="ltr">+964 772 154 7883</a></dd>
+          </div>
+          <div>
+            <dt data-i18n="contact_instagram">Instagram</dt>
+            <dd><a class="text-link" href="https://www.instagram.com/astrocode.krd" target="_blank" rel="noopener" dir="ltr">@astrocode.krd</a></dd>
+          </div>
+        </dl>
       </div>
     </div>
-    <div class="process-item">
-      <div class="process-num">03</div>
-      <div>
-        <h3 data-i18n="process_3_h3">Build</h3>
-        <p data-i18n="process_3_p">Development happens in the open, with regular check-ins, working previews, and room to refine as we go.</p>
-      </div>
-    </div>
-    <div class="process-item">
-      <div class="process-num">04</div>
-      <div>
-        <h3 data-i18n="process_4_h3">Launch</h3>
-        <p data-i18n="process_4_p">We deploy the finished product, hand over everything you need to maintain it, and stay reachable after launch.</p>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section id="duo" class="node">
-  <div class="section-head">
-    <h2 data-i18n="team_h2">The Team</h2>
-    <div class="eyebrow">05 — Team</div>
-  </div>
-  <div class="duo-grid">
-    <div class="person-card">
-      <div class="person-avatar">RH</div>
-      <h3>Rahand Hemn</h3>
-      <span class="role">Full-Stack Developer</span>
-      <p>Web · C# · Python · JavaScript · Dart · SQL · MySQL</p>
-    </div>
-    <div class="person-card">
-      <div class="person-avatar">SS</div>
-      <h3>Sarkar Salar</h3>
-      <span class="role">Full-Stack Developer</span>
-      <p>Web · C# · C++ · Python</p>
-    </div>
-    <div class="person-card">
-      <div class="person-avatar">MO</div>
-      <h3>Muhammed Omer</h3>
-      <span class="role">Full-Stack Developer</span>
-      <p>[Add stack — e.g. Web · C# · Python · JS]</p>
-    </div>
-  </div>
-</section>
+</main>
 
-<section id="contact" class="node">
-  <div class="contact-panel">
-    <div class="eyebrow" style="justify-content:center; display:flex;">06 — Contact</div>
-    <h2 data-i18n="contact_h2">Have a project in mind?</h2>
-    <p data-i18n="contact_p">Share what you're building. We'll respond with a clear plan and timeline — no obligation.</p>
-    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; margin-top:8px;">
-      <a href="mailto:darvanjabar@gmail.com" class="btn" data-i18n="contact_cta">Start a project →</a>
-      <a href="https://www.instagram.com/astrocode.krd" target="_blank" rel="noopener" class="btn btn-ig">@astrocode.krd</a>
-    </div>
-    <div style="margin-top:22px; display:flex; gap:24px; justify-content:center; flex-wrap:wrap;">
-      <a href="tel:+9647721547883" class="mono" style="font-size:0.85rem; color:var(--silkscreen-dim);">+964 772 154 7883</a>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div>© 2026 astrocode.krd. <span data-i18n="footer_built">Engineered in Sulaymaniyah.</span></div>
-  <div style="display:flex; gap:24px;">
-    <a href="https://www.instagram.com/astrocode.krd" target="_blank" rel="noopener">Instagram</a>
-    <a href="mailto:darvanjabar@gmail.com">Email</a>
+<footer class="site-footer">
+  <div class="wrap footer-inner">
+    <p><span dir="ltr">© 2026 astrocode.krd.</span> <span data-i18n="footer_built">Made in Sulaymaniyah.</span></p>
+    <p class="footer-links">
+      <a class="text-link" href="https://www.instagram.com/astrocode.krd" target="_blank" rel="noopener" data-i18n="contact_instagram">Instagram</a>
+      <a class="text-link" href="mailto:darvanjabar@gmail.com" data-i18n="contact_email">Email</a>
+    </p>
   </div>
 </footer>
 
 <script>
-  // Draw the copper trace from top of hero to bottom of contact panel
-  function updateTracePath() {
-    const svg = document.getElementById('trace-svg');
-    const path = document.getElementById('trace-path');
-    const docHeight = document.body.scrollHeight;
-    svg.setAttribute('viewBox', `0 0 2 ${docHeight}`);
-    path.setAttribute('d', `M1,0 L1,${docHeight}`);
-    const len = docHeight;
-    path.style.strokeDasharray = len;
-    path.style.strokeDashoffset = len;
-  }
+(function () {
+  // Sorani Kurdish text. English lives in the HTML above.
+  var KU = {
+    skip: "بازدان بۆ ناوەڕۆک",
+    nav_label: "سەرەکی",
+    nav_work: "کارەکان",
+    nav_services: "خزمەتگوزاری",
+    nav_process: "پرۆسە",
+    nav_team: "تیم",
+    nav_contact: "پەیوەندی",
 
-  function onScroll() {
-    const path = document.getElementById('trace-path');
-    const scrollTop = window.scrollY;
-    const winHeight = window.innerHeight;
-    const docHeight = document.body.scrollHeight - winHeight;
-    const progress = Math.min(scrollTop / docHeight, 1);
-    const len = document.body.scrollHeight;
-    path.style.strokeDashoffset = len - (len * progress);
+    hero_h1: "ماڵپەڕ و ئەپلیکەیشن بۆ کار و کاسبییەکانی کوردستان دروست دەکەین.",
+    hero_lead: "ئێمە سێ گەشەپێدەرین لە سلێمانی. ماڵپەڕ یان ئەپلیکەیشنەکەت خۆمان دیزاین دەکەین، دروستی دەکەین و بڵاوی دەکەینەوە، بە نرخێک کە بۆ کار و کاسبییەکی بچووک گونجاو بێت. ڕاستەوخۆ قسە لەگەڵ ئەو کەسانە دەکەیت کە کۆدەکە دەنووسن.",
+    cta: "دەربارەی پرۆژەکەت ئیمەیڵمان بۆ بنێرە",
+    hero_work_link: "کارەکانمان ببینە",
+    hero_status: "ئێستا پرۆژەی نوێ وەردەگرین. زۆربەیان ٢ تا ٦ هەفتە دەخایەنن.",
 
-    document.querySelectorAll('.node').forEach(node => {
-      const rect = node.getBoundingClientRect();
-      if (rect.top < winHeight * 0.5 && rect.bottom > 0) {
-        node.classList.add('lit');
-      }
-    });
-  }
+    work_h2: "هەڵبژاردەی کارەکانمان",
+    work_intro: "ماڵپەڕی کڕیارەکانمان کە لە ساڵی ٢٠٢٦ دروستمان کردوون.",
+    work_asia: "ماڵپەڕێکی شەش لاپەڕەیی بۆ نەخۆشخانەیەکی ئاژەڵان لە سلێمانی: خزمەتگوزارییەکان، پشکنینی تاقیگە، تیمەکە و پەیوەندیکردن بە یەک کرتە، بە ئینگلیزی، کوردی و عەرەبی.",
+    work_daroon: "پلاتفۆرمێک بۆ دۆزینەوەی پزیشکی دەروونی یان چارەسەرکار و گرتنی نۆرە.",
+    work_epu: "ماڵپەڕە فەرمییە نوێیەکەی زانکۆی پۆلیتەکنیکی هەولێر بە ئینگلیزی، کوردی و عەرەبی، کە کۆلێژ و پەیمانگاکان، ستافی ئەکادیمی و پەیوەندییە نێودەوڵەتییەکانی لەخۆ دەگرێت.",
+    work_platinum: "ماڵپەڕێک بۆ ستۆدیۆیەکی دیزاینی ناوەوە و مۆبیلیات، کە ئەو دیزاینە تایبەتانە نیشان دەدات کە بۆ ماڵ و شوێنی بازرگانی دروستیان دەکات.",
+    visit: "سەردانی ماڵپەڕ",
+    new_tab: "(لە تابێکی نوێدا دەکرێتەوە)",
 
-  window.addEventListener('resize', updateTracePath);
-  window.addEventListener('load', () => { updateTracePath(); onScroll(); });
-  window.addEventListener('scroll', onScroll);
+    services_h2: "ئەوەی دروستی دەکەین",
+    services_intro: "ماڵپەڕ، ئەپلیکەیشنی مۆبایل و دیسکتۆپ، و ئەو سێرڤەر و داتابەیسانەی لە پشتیانەوەن.",
+    web_h3: "ماڵپەڕ",
+    web_p: "ماڵپەڕێک کە خێرا دەکرێتەوە، لەسەر مۆبایل باش کار دەکات و بە شێوەیەک ڕێکخراوە کە خەڵک لە گووگڵ بتدۆزنەوە.",
+    web_1: "لاپەڕەی ناساندن",
+    web_2: "ماڵپەڕی پۆرتفۆلیۆ",
+    web_3: "دوکانی ئۆنلاینی بچووک",
+    app_h3: "ئەپلیکەیشن",
+    app_p: "ئەپلیکەیشنی مۆبایل و دیسکتۆپ بۆ کاری ڕاستەقینە، لە ئامرازێکەوە کە کارمەندەکانت ڕۆژانە بەکاری دەهێنن تا ئەپێک بۆ کڕیارەکانت.",
+    app_1: "ئەپی Android و Flutter",
+    app_2: "ئامرازی دیسکتۆپ",
+    app_3: "ئامرازی پشتبەستوو بە داتابەیس",
 
-  // Recalculate once webfonts finish loading — layout can shift and
-  // desync the trace length if we only measure on window 'load'
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(() => { updateTracePath(); onScroll(); });
-  }
+    process_h2: "چۆن کار دەکەین",
+    step_1_h3: "قسە دەکەین",
+    step_1_p: "بە گفتوگۆیەک دەست پێدەکەین دەربارەی ئەوەی پێویستتە، بۆ کێیە، بودجەکەت و کاتی تەواوبوونی. بە زمانێکی ئاسان، و هیچ شتێکی زیادەت پێ نافرۆشین کە پێویستت پێی نەبێت.",
+    step_2_h3: "دیزاین دەکەین",
+    step_2_p: "پێش ئەوەی هیچ کۆدێک بنووسین، لاپەڕەکان و شێوەی دیزاینەکە ئامادە دەکەین، بۆ ئەوەی پێش دروستکردن ببینیت چی وەردەگریت.",
+    step_3_h3: "دروستی دەکەین",
+    step_3_p: "کارەکە دروست دەکەین و لە کاتی کارکردندا وەشانی کارا نیشانت دەدەین، بۆ ئەوەی زوو داوای گۆڕانکاری بکەیت.",
+    step_4_h3: "بڵاوی دەکەینەوە",
+    step_4_p: "بەرهەمە کۆتاییەکە بڵاو دەکەینەوە، هەموو ئەوەی پێویستە بۆ چاودێری کردنی دەیدەینە دەستت، و لەدوای بڵاوکردنەوەش لەگەڵت دەمێنینەوە.",
 
-  // ---------- Language toggle (EN / Sorani Kurdish) ----------
-  const translations = {
-    en: {
-      hero_eyebrow: "Sulaymaniyah, IQ — Est. 2026",
-      hero_h1: "We build <em>high-caliber websites and apps</em> at accessible prices.",
-      hero_sub: "One dedicated team, zero hand-off friction. We design, build, and launch full-stack web, mobile, and desktop products — guiding your project from wireframe to the final interactive interface.",
-      spec_stack_label: "Stack",
-      spec_status_label: "Status",
-      spec_status_value: "Currently accepting new projects",
-      spec_turnaround_label: "Turnaround",
-      services_h2: "Capabilities",
-      services_web_h3: "Websites",
-      services_web_p: "From marketing sites to full storefronts — engineered for speed, responsiveness, and visibility from day one.",
-      services_app_h3: "Apps",
-      services_app_p: "Mobile and desktop applications built for real-world workflows, from internal tools to consumer-facing products.",
-      work_h2: "Selected Work",
-      process_h2: "Our Process",
-      process_1_h3: "Discovery",
-      process_1_p: "We start with a focused conversation to define your goals, audience, budget, and timeline — no jargon, no upselling.",
-      process_2_h3: "Design",
-      process_2_p: "We map the structure and visual direction before a single line of code is written, so the final build holds no surprises.",
-      process_3_h3: "Build",
-      process_3_p: "Development happens in the open, with regular check-ins, working previews, and room to refine as we go.",
-      process_4_h3: "Launch",
-      process_4_p: "We deploy the finished product, hand over everything you need to maintain it, and stay reachable after launch.",
-      team_h2: "The Team",
-      contact_h2: "Have a project in mind?",
-      contact_p: "Share what you're building. We'll respond with a clear plan and timeline — no obligation.",
-      contact_cta: "Start a project →",
-      footer_built: "Engineered in Sulaymaniyah.",
-      nav_work: "Work",
-      nav_services: "Services",
-      nav_process: "Process",
-      nav_team: "Team",
-      nav_contact: "Contact"
-    },
-    ku: {
-      hero_eyebrow: "سلێمانی، عێراق — دامەزراوی ٢٠٢٦",
-      hero_h1: "ماڵپەڕ و <em>ئەپلیکەیشنی کوالیتی بەرز</em> بە نرخێکی گونجاو دروست دەکەین.",
-      hero_sub: "یەک تیمی تەرخانکراو، بەبێ کێشە لە ڕادەستکردنی کار لەنێوان بەشەکان. بەرنامەی full-stack بۆ وێب، مۆبایل و دیسکتۆپ دیزاین، دروست و بڵاو دەکەینەوە — پرۆژەکەت لە wireframe‌ەوە تاکو دوایین ئینتەرفەیسی کارلێکەر، ڕابەرایەتی دەکەین.",
-      spec_stack_label: "پێکهاتە",
-      spec_status_label: "بارودۆخ",
-      spec_status_value: "ئێستا ئامادەین بۆ وەرگرتنی پرۆژەی نوێ",
-      spec_turnaround_label: "کاتی تەواوکردن",
-      services_h2: "توانا و لێهاتووییەکانمان",
-      services_web_h3: "ماڵپەڕ",
-      services_web_p: "لە ماڵپەڕی بازاڕگەری تا دوکانی ئۆنلاینی تەواو — داڕێژراوە بۆ خێرایی، وەڵامدانەوەی بەرز، و دیاربوونی بەهێز لە یەکەم ڕۆژەوە.",
-      services_app_h3: "ئەپڵیکەیشن",
-      services_app_p: "ئەپلیکەیشنی مۆبایل و دیسکتۆپ کە بۆ کاری ڕاستەقینە دروستکراون، لە ئامرازی ناوخۆیی تا بەرهەمی ڕاستەوخۆ بۆ بەکارهێنەر.",
-      work_h2: "هەڵبژاردەی کارەکانمان",
-      process_h2: "پرۆسەکەمان",
-      process_1_h3: "دۆزینەوە",
-      process_1_p: "بە گفتوگۆیەکی وردەوە دەست پێدەکەین بۆ دیاریکردنی ئامانج، بەکارهێنەران، بودجە و کاتی تەواوکردن — بێ وشەی گران، بێ فشار بۆ کڕین.",
-      process_2_h3: "دیزاین",
-      process_2_p: "پێش نووسینی تاکە دێڕێکی کۆد، پێکهاتە و ڕووکاری دیزاین دەکەین، بۆ ئەوەی کارە کۆتاییەکە هیچ سەرسوڕمانێکی تێدا نەبێت.",
-      process_3_h3: "دروستکردن",
-      process_3_p: "گەشەپێدان بە شێوەیەکی ڕوون و بەردەوام ئەنجام دەدرێت، لەگەڵ پەیوەندی بەردەوام، پیشاندانی کارە کارا، و بۆشایی بۆ باشترکردن.",
-      process_4_h3: "بڵاوکردنەوە",
-      process_4_p: "بەرهەمە کۆتاییەکە بڵاو دەکەینەوە، هەموو ئەوەی پێویستە بۆ چاودێری کردنی دەیدەینە دەستت، و لەدوای بڵاوکردنەوەش لەگەڵت دەمێنینەوە.",
-      team_h2: "تیمەکە",
-      contact_h2: "بیر لە دروستکردنی پڕۆژەیەک دەکەیتەوە؟",
-      contact_p: "ئەوەی دەتەوێت دروستی بکەیت لەگەڵمان هاوبەش بکە. وەڵامت دەدەینەوە لەگەڵ پلانێکی ڕوون و کاتی تەواوکردن — بێ هیچ ئەرکێک لەسەرت.",
-      contact_cta: "دەست بکە بە پرۆژەیەک →",
-      footer_built: "بە وردی و پیشەیی دروستکراوە لە سلێمانی.",
-      nav_work: "کارەکان",
-      nav_services: "خزمەتگوزاری",
-      nav_process: "پرۆسە",
-      nav_team: "تیم",
-      nav_contact: "پەیوەندی"
-    }
+    team_h2: "تیمەکە",
+    team_intro: "لە ساڵی ٢٠٢٦ دەستمان پێکرد.",
+    role: "گەشەپێدەری فوڵ-ستاک",
+
+    contact_h2: "بیر لە دروستکردنی پرۆژەیەک دەکەیتەوە؟",
+    contact_p: "ئەوەی دەتەوێت دروستی بکەیت لەگەڵمان هاوبەش بکە. وەڵامت دەدەینەوە لەگەڵ پلانێکی ڕوون و کاتی تەواوکردن، بێ هیچ ئەرکێک لەسەرت.",
+    contact_email: "ئیمەیڵ",
+    contact_phone: "تەلەفۆن",
+    contact_instagram: "ئینستاگرام",
+    footer_built: "لە سلێمانی دروستکراوە."
   };
 
-  function applyLanguage(lang) {
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-      const key = el.getAttribute('data-i18n');
-      const value = translations[lang][key];
-      if (value) el.innerHTML = value;
+  var UI = {
+    en: { title: "AstroCode — Websites & Apps", toggle: "کوردی", toggleLang: "ckb", menu: "Menu", close: "Close" },
+    ku: { title: "AstroCode — ماڵپەڕ و ئەپلیکەیشن", toggle: "English", toggleLang: "en", menu: "مێنیو", close: "داخستن" }
+  };
+
+  var root = document.documentElement;
+  var toggle = document.getElementById("lang-toggle");
+  var menuButton = document.getElementById("menu-button");
+  var menu = document.getElementById("mobile-menu");
+  var texts = Array.prototype.slice.call(document.querySelectorAll("[data-i18n]"));
+  var labels = Array.prototype.slice.call(document.querySelectorAll("[data-i18n-label]"));
+  var lang = "en";
+
+  texts.forEach(function (el) { el.setAttribute("data-en", el.textContent); });
+  labels.forEach(function (el) { el.setAttribute("data-en-label", el.getAttribute("aria-label")); });
+
+  function setLanguage(next) {
+    lang = next;
+    var ku = next === "ku";
+    texts.forEach(function (el) {
+      var value = KU[el.getAttribute("data-i18n")];
+      el.textContent = ku && value ? value : el.getAttribute("data-en");
     });
-    document.body.classList.toggle('lang-ku', lang === 'ku');
-    document.getElementById('lang-en').classList.toggle('active', lang === 'en');
-    document.getElementById('lang-ku').classList.toggle('active', lang === 'ku');
-    document.getElementById('lang-en').setAttribute('aria-pressed', String(lang === 'en'));
-    document.getElementById('lang-ku').setAttribute('aria-pressed', String(lang === 'ku'));
-    // Layout reflows when the font/script changes — recalc the trace line
-    updateTracePath();
-    onScroll();
-  }
-
-  document.getElementById('lang-en').addEventListener('click', () => applyLanguage('en'));
-  document.getElementById('lang-ku').addEventListener('click', () => applyLanguage('ku'));
-
-  // Mobile nav toggle
-  const hamburger = document.getElementById('hamburger');
-  const mobileNav = document.getElementById('mobile-nav');
-  const navScrim = document.getElementById('nav-scrim');
-
-  function closeMobileNav() {
-    hamburger.classList.remove('open');
-    mobileNav.classList.remove('open');
-    navScrim.classList.remove('open');
-    hamburger.setAttribute('aria-expanded', 'false');
-  }
-  function toggleMobileNav() {
-    const isOpen = mobileNav.classList.toggle('open');
-    hamburger.classList.toggle('open', isOpen);
-    navScrim.classList.toggle('open', isOpen);
-    hamburger.setAttribute('aria-expanded', String(isOpen));
-  }
-  hamburger.addEventListener('click', toggleMobileNav);
-  navScrim.addEventListener('click', closeMobileNav);
-  mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobileNav));
-
-  // Reveal on scroll
-  const revealEls = document.querySelectorAll('.module, .project-card, .process-item, .person-card');
-  revealEls.forEach(el => el.setAttribute('data-reveal', ''));
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
+    labels.forEach(function (el) {
+      var value = KU[el.getAttribute("data-i18n-label")];
+      el.setAttribute("aria-label", ku && value ? value : el.getAttribute("data-en-label"));
     });
-  }, { threshold: 0.15 });
-  revealEls.forEach(el => observer.observe(el));
+    root.lang = ku ? "ckb" : "en";
+    root.dir = ku ? "rtl" : "ltr";
+    document.title = UI[next].title;
+    toggle.textContent = UI[next].toggle;
+    toggle.lang = UI[next].toggleLang;
+    menuButton.textContent = menu.hidden ? UI[next].menu : UI[next].close;
+    try { localStorage.setItem("astrocode-lang", next); } catch (e) {}
+  }
+
+  function setMenu(open) {
+    menu.hidden = !open;
+    menuButton.setAttribute("aria-expanded", String(open));
+    menuButton.textContent = open ? UI[lang].close : UI[lang].menu;
+    document.body.classList.toggle("menu-open", open);
+  }
+
+  toggle.addEventListener("click", function () {
+    setLanguage(lang === "en" ? "ku" : "en");
+  });
+  menuButton.addEventListener("click", function () {
+    setMenu(menu.hidden);
+  });
+  menu.addEventListener("click", function (event) {
+    if (event.target.closest("a")) setMenu(false);
+  });
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && !menu.hidden) {
+      setMenu(false);
+      menuButton.focus();
+    }
+  });
+  window.matchMedia("(min-width: 768px)").addEventListener("change", function (event) {
+    if (event.matches) setMenu(false);
+  });
+
+  var saved = null;
+  try { saved = localStorage.getItem("astrocode-lang"); } catch (e) {}
+  if (saved === "ku") setLanguage("ku");
+})();
+
+// Hero picture: a ringed copper planet drawn as dots (ordered dithering, like a
+// dot-matrix print). It turns slowly, and stays still for people who turn off motion.
+(function () {
+  var canvas = document.getElementById("hero-art");
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext("2d");
+  var still = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  var CELL = 4;                                   // one dot every 4px
+  var PLANET = "#B87333", HIGHLIGHT = "#E6B88A", RING = "#8D94A2";
+  var BAYER = [0,32,8,40,2,34,10,42,48,16,56,24,50,18,58,26,12,44,4,36,14,46,6,38,60,28,52,20,62,30,54,22,
+               3,35,11,43,1,33,9,41,51,19,59,27,49,17,57,25,15,47,7,39,13,45,5,37,63,31,55,23,61,29,53,21];
+  var TILT = 0.38, ROLL = -0.45;                  // how far we look down on the ring, and its angle
+  var sT = Math.sin(TILT), cT = Math.cos(TILT), cR = Math.cos(ROLL), sR = Math.sin(ROLL);
+
+  // Light from the top left, slightly in front, turned into the ring's frame
+  var lx = -0.62, ly = -0.5, lz = 0.6, lm = Math.hypot(lx, ly, lz);
+  lx /= lm; ly /= lm; lz /= lm;
+  var Lu = lx * cR + ly * sR, Lv = -lx * sR + ly * cR, Lz = lz;
+  var lightDotPole = -Lv * cT + Lz * sT;          // light direction against the planet's axis
+
+  // Cloud bands, worked out once as a wrap-around map of the planet's surface
+  var TW = 256, TH = 128, TEX = new Float32Array(TW * TH);
+  function h3(x, y, z) { var h = Math.sin(x * 127.1 + y * 311.7 + z * 74.7) * 43758.5453; return h - Math.floor(h); }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function noise3(x, y, z) {
+    var xi = Math.floor(x), yi = Math.floor(y), zi = Math.floor(z);
+    var xf = x - xi, yf = y - yi, zf = z - zi;
+    var u = xf * xf * (3 - 2 * xf), v = yf * yf * (3 - 2 * yf), w = zf * zf * (3 - 2 * zf);
+    return lerp(
+      lerp(lerp(h3(xi, yi, zi), h3(xi + 1, yi, zi), u), lerp(h3(xi, yi + 1, zi), h3(xi + 1, yi + 1, zi), u), v),
+      lerp(lerp(h3(xi, yi, zi + 1), h3(xi + 1, yi, zi + 1), u), lerp(h3(xi, yi + 1, zi + 1), h3(xi + 1, yi + 1, zi + 1), u), v),
+      w);
+  }
+  for (var b = 0; b < TH; b++) {
+    var lat = (b / (TH - 1) - 0.5) * Math.PI;
+    for (var a = 0; a < TW; a++) {
+      var lon = (a / TW) * Math.PI * 2;
+      var px = Math.cos(lat) * Math.cos(lon), py = Math.sin(lat), pz = Math.cos(lat) * Math.sin(lon);
+      var turb = noise3(px * 2.2 + 5, py * 2.2, pz * 2.2) + 0.5 * noise3(px * 4.4, py * 4.4 + 7, pz * 4.4);
+      var bands = 0.5 + 0.5 * Math.sin(py * 12 + turb * 3);
+      // one storm, like Jupiter's spot
+      var dl = lon - 2.2, dla = lat + 0.32;
+      var storm = Math.exp(-(dl * dl) / 0.05 - (dla * dla) / 0.008);
+      TEX[b * TW + a] = Math.min(1, Math.max(0, bands * (1 - 0.6 * storm) + 0.15 * storm));
+    }
+  }
+
+  // The ring: bands across it and clumps around it, so you can watch it orbit
+  var RA = 256, RB = 64, RTEX = new Float32Array(RA * RB);
+  for (var rb = 0; rb < RB; rb++) {
+    var q0 = rb / (RB - 1);
+    var band = 0.58 + 0.16 * Math.sin(q0 * 31) + 0.1 * Math.sin(q0 * 67 + 1) - 0.25 * q0;
+    if (q0 > 0.6 && q0 < 0.67) band = 0;                // the gap in the ring
+    for (var ra = 0; ra < RA; ra++) {
+      var ang = (ra / RA) * Math.PI * 2, ca = Math.cos(ang), sa = Math.sin(ang);
+      var clumps = (noise3(ca * 5, sa * 5, q0 * 8) + 0.5 * noise3(ca * 11 + 3, sa * 11, q0 * 16)) / 1.5;
+      RTEX[rb * RA + ra] = Math.max(0, band * (0.4 + 1.0 * clumps));
+    }
+  }
+  var ORBIT = (Math.PI * 2) / 20000;              // inner edge goes round in about 20 seconds
+
+  var W = 0, H = 0, dpr = 1;
+  function measure() {
+    var box = canvas.getBoundingClientRect();
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = box.width; H = box.height;
+    canvas.width = Math.max(1, Math.round(W * dpr));
+    canvas.height = Math.max(1, Math.round(H * dpr));
+  }
+
+  function draw(time) {
+    if (!W || !H) return;
+    var cols = Math.floor(W / CELL), rows = Math.floor(H / CELL);
+    var ox = (W - cols * CELL) / 2, oy = (H - rows * CELL) / 2;
+    var cx = W / 2, cy = H / 2;
+    var R = Math.min(W / 3.8, H / 2.4), R2 = R * R;
+    var r1 = R * 1.3, r2 = R * 1.95;
+    var spin = time * 0.0001;                     // radians per ms: one turn in about a minute
+    var dot = CELL - 1;
+    var body = new Path2D(), shine = new Path2D(), ring = new Path2D();
+
+    for (var j = 0; j < rows; j++) {
+      var y = oy + (j + 0.5) * CELL - cy;
+      for (var i = 0; i < cols; i++) {
+        var x = ox + (i + 0.5) * CELL - cx;
+        var u = x * cR + y * sR, v = -x * sR + y * cR;
+        var th = BAYER[((j & 7) << 3) | (i & 7)] / 64 + 1 / 128;
+        var sx = ox + i * CELL, sy = oy + j * CELL;
+        var inside = u * u + v * v < R2;
+
+        // The ring: its near half is drawn over the planet, its far half hides behind it
+        var beta = v / sT, rho = Math.sqrt(u * u + beta * beta);
+        if (rho > r1 && rho < r2 && (v > 0 || !inside)) {
+          var q = (rho - r1) / (r2 - r1);
+          // orbiting: the inner edge moves faster than the outer edge, like real rings
+          var psi = Math.atan2(beta, u) - ORBIT * Math.pow(r1 / rho, 1.5) * time;
+          var ri = Math.floor((((psi / (Math.PI * 2)) % 1) + 1) % 1 * RA) % RA;
+          var dens = RTEX[Math.min(RB - 1, Math.round(q * (RB - 1))) * RA + ri];
+          var lit = 0.8 + 0.2 * (-u / r2);
+          // planet's shadow on the ring
+          var pz = beta * cT, pd = u * Lu + v * Lv + pz * Lz;
+          if (pd < 0 && pd * pd > u * u + v * v + pz * pz - R2) lit *= 0.2;
+          if (dens * lit > th) ring.rect(sx, sy, dot, dot);
+          continue;
+        }
+        if (!inside) continue;
+
+        // The planet: lit from the top left, banded, turning
+        var nu = u / R, nv = v / R, nz = Math.sqrt(Math.max(0, 1 - nu * nu - nv * nv));
+        var lam = Math.max(0, nu * Lu + nv * Lv + nz * Lz);
+        var sinLat = -nv * cT + nz * sT;
+        var lonP = Math.atan2(nu, nv * sT + nz * cT) + spin;
+        var ta = Math.floor(((lonP / (Math.PI * 2)) % 1 + 1) % 1 * TW) % TW;
+        var tb = Math.min(TH - 1, Math.max(0, Math.round((Math.asin(Math.max(-1, Math.min(1, sinLat))) / Math.PI + 0.5) * (TH - 1))));
+        var val = Math.pow(lam, 0.8) * (0.45 + 0.55 * TEX[tb * TW + ta]);
+        // the ring's shadow across the planet
+        if (lightDotPole !== 0) {
+          var t = -(sinLat * R) / lightDotPole;
+          if (t > 0) {
+            var hx = nu * R + t * Lu, hy = nv * R + t * Lv, hz = nz * R + t * Lz;
+            var hr = Math.sqrt(hx * hx + hy * hy + hz * hz);
+            if (hr > r1 && hr < r2) {
+              var hq = (hr - r1) / (r2 - r1);
+              if (!(hq > 0.6 && hq < 0.67)) val *= 0.35;
+            }
+          }
+        }
+        if (val > th) {
+          if (val > 0.74 + th * 0.26) shine.rect(sx, sy, dot, dot);
+          else body.rect(sx, sy, dot, dot);
+        }
+      }
+    }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = RING; ctx.fill(ring);
+    ctx.fillStyle = PLANET; ctx.fill(body);
+    ctx.fillStyle = HIGHLIGHT; ctx.fill(shine);
+  }
+
+  var running = false, onScreen = true, last = 0, clock = 0, prev = 0;
+  function frame(now) {
+    if (!running) return;
+    if (now - last >= 33) {                         // about 30 frames a second, smooth enough for the ring
+      clock += Math.min(now - prev, 100);
+      prev = now; last = now;
+      draw(clock);
+    }
+    requestAnimationFrame(frame);
+  }
+  function start() {
+    if (running || still.matches || !onScreen || document.hidden) return;
+    running = true; prev = performance.now();
+    requestAnimationFrame(frame);
+  }
+  function stop() { running = false; }
+
+  measure(); draw(clock);
+  if ("ResizeObserver" in window) {
+    new ResizeObserver(function () { measure(); draw(clock); }).observe(canvas);
+  }
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      onScreen = entries[0].isIntersecting;
+      if (onScreen) start(); else stop();
+    }).observe(canvas);
+  }
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) stop(); else start();
+  });
+  if (still.addEventListener) {
+    still.addEventListener("change", function () { if (still.matches) stop(); else start(); });
+  }
+  start();
+})();
+
+// Side planets: on wide screens, programming languages drift up the empty margins
+// as planets made of their own names ("C# C# C#..." wrapped round a ball). Each planet
+// takes a new language every time it leaves the top, so the whole list comes round.
+// Decoration only: hidden below 1520px wide, and still for people who turn off motion.
+(function () {
+  var canvas = document.getElementById("side-planets");
+  if (!canvas || !canvas.getContext) return;
+  var ctx = canvas.getContext("2d");
+  var wide = window.matchMedia("(min-width: 1520px)");
+  var still = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  // Our own stack first, then the rest of the programming world. Edit freely.
+  var LANGS = ["C#", "Python", "JavaScript", "Dart", "SQL", "C++", "Flutter", "MySQL", "HTML", "CSS",
+               "TypeScript", "Java", "Kotlin", "Swift", "Go", "Rust", "PHP", "Ruby", "C", "R",
+               "Lua", "Perl", "Scala", "Haskell", "Elixir", "Erlang", "Julia", "Zig", "Bash", "PowerShell",
+               "F#", "Clojure", "Groovy", "Objective-C", "MATLAB", "Fortran", "COBOL", "Pascal", "Assembly", "Solidity",
+               "WebAssembly", "Elm", "OCaml", "Lisp", "Prolog", "Nim", "Crystal", "Ada", "Smalltalk", "VB.NET"];
+  var SHORT = LANGS.filter(function (l) { return l.length <= 4; });   // small planets need short names
+
+  // Circuit-board colours that sit with the dark board and copper:
+  // silkscreen grey, copper, trace blue, gold, bright copper, steel blue, sand
+  var PALETTE = ["#A7ADB9", "#B87333", "#6B97B3", "#C9A45C", "#D89456", "#8FA9C4", "#CDB89A"];
+
+  // Planet sizes down each side: large, medium and small, as a share of the margin width
+  var PATTERN = ["L", "S", "M", "S", "L", "M", "S", "M"];
+  var SIZES = { L: { lo: 0.27, hi: 0.34, min: 40, max: 120 },
+                M: { lo: 0.17, hi: 0.22, min: 32, max: 80 },
+                S: { lo: 0.08, hi: 0.12, min: 20, max: 44 } };
+
+  var FONT = 'ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace';
+  var LX = -0.55, LY = -0.5, LZ = 0.67, LM = Math.hypot(LX, LY, LZ);
+  LX /= LM; LY /= LM; LZ /= LM;                  // light from the top left, like the hero planet
+  var EDGE = 140;                                 // planets start and finish this far off screen
+
+  var planets = [], vw = 0, vh = 0, dpr = 1;
+
+  function rand(a, b) { return a + Math.random() * (b - a); }
+  function mod(a, n) { return ((a % n) + n) % n; }
+
+  // Draw a word once into its own little canvas, then stamp it many times
+  function stamp(text, size, color) {
+    var c = document.createElement("canvas"), g = c.getContext("2d");
+    g.font = size * dpr + "px " + FONT;
+    var w = Math.ceil(g.measureText(text).width) + 2, h = Math.ceil(size * 1.4 * dpr);
+    c.width = w; c.height = h;
+    g.font = size * dpr + "px " + FONT;
+    g.fillStyle = color;
+    g.textAlign = "center";
+    g.textBaseline = "middle";
+    g.fillText(text, w / 2, h / 2);
+    return { img: c, w: w / dpr, h: h / dpr };
+  }
+
+  // The words and colours for a planet wearing a given language
+  function lookFor(p, label) {
+    if (p.label === label) return p.look;
+    var idx = LANGS.indexOf(label);
+    var size = Math.max(7, Math.min(12, (p.R * 0.3) / ((label.length + 1) * 0.6)));
+    p.label = label;
+    p.look = {
+      size: size,
+      lh: size * 1.25,
+      word: stamp(label, size, PALETTE[idx % PALETTE.length]),
+      ring: p.ringed ? stamp(label, Math.max(9, size), PALETTE[(idx + 3) % PALETTE.length]) : null
+    };
+    return p.look;
+  }
+
+  function build() {
+    planets = [];
+    vw = window.innerWidth; vh = window.innerHeight;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(vw * dpr);
+    canvas.height = Math.round(vh * dpr);
+    if (!wide.matches) return;
+
+    // The empty margins either side of the page content
+    var wrap = document.querySelector("main .wrap");
+    if (!wrap) return;
+    var box = wrap.getBoundingClientRect(), cs = getComputedStyle(wrap);
+    var left = box.left + parseFloat(cs.paddingLeft), right = box.right - parseFloat(cs.paddingRight);
+    var sides = [{ x0: 24, x1: left - 40, speed: 10, depth: 0.25 },
+                 { x0: right + 40, x1: vw - 24, speed: 13, depth: 0.32 }];
+    if (sides[0].x1 - sides[0].x0 < 140) return;
+
+    sides.forEach(function (side, s) {
+      var width = side.x1 - side.x0, y = 0, column = [], big = 0, small = 0;
+      var pattern = s === 0 ? PATTERN : PATTERN.slice(3).concat(PATTERN.slice(0, 3));
+      pattern.forEach(function (kind, j) {
+        // First time round, the big planets wear our own stack; small ones start further down the list
+        var seed = kind === "S" ? 6 + 2 * small++ + s : 2 * big++ + s;
+        var sz = SIZES[kind];
+        var R = Math.max(sz.min, Math.min(sz.max, width * rand(sz.lo, sz.hi)));
+        var ringed = kind === "M" && j % 2 === 0;
+        var reach = ringed ? R * 2.05 : R * 1.05;
+        var lo = side.x0 + reach, hi = side.x1 - reach;
+        var lean = j % 2 ? rand(0.55, 1) : rand(0, 0.45);          // zigzag across the margin
+        y += R;
+        column.push({
+          R: R, kind: kind, ringed: ringed, side: side, base: y,
+          x: lo < hi ? lo + (hi - lo) * lean : (side.x0 + side.x1) / 2,
+          seed: seed,
+          spin: rand(0.15, 0.3) * (Math.random() < 0.5 ? -1 : 1),
+          phase: rand(0, Math.PI * 2),
+          tilt: rand(-0.15, 0.15),
+          roll: rand(-0.4, 0.4),
+          ringSpin: rand(0.1, 0.18),
+          label: "", look: null
+        });
+        y += R + rand(36, 96);
+      });
+      var span = Math.max(y, vh + EDGE * 2 + 40);
+      column.forEach(function (p) { p.span = span; planets.push(p); });
+    });
+  }
+
+  function put(img, alpha, a, b, c, d, x, y) {
+    ctx.globalAlpha = alpha;
+    ctx.setTransform(dpr * a, dpr * b, dpr * c, dpr * d, dpr * x, dpr * y);
+    ctx.drawImage(img.img, -img.w / 2, -img.h / 2, img.w, img.h);
+  }
+
+  function drawRing(p, look, cx, cy, sec, front) {
+    var a = p.R * 1.9, b = p.R * 0.44, tok = look.ring;
+    var per = Math.PI * (3 * (a + b) - Math.sqrt((3 * a + b) * (a + 3 * b)));
+    var n = Math.max(8, Math.floor(per / (tok.w + 6)));
+    var cr = Math.cos(p.roll), sr = Math.sin(p.roll), psi0 = sec * p.ringSpin;
+    for (var i = 0; i < n; i++) {
+      var psi = psi0 + (i * Math.PI * 2) / n, sp = Math.sin(psi), cp = Math.cos(psi);
+      if ((sp > 0) !== front) continue;                 // near half in front, far half behind
+      var ex = a * cp, ey = b * sp;
+      var x = cx + ex * cr - ey * sr, y = cy + ex * sr + ey * cr;
+      if (!front && (x - cx) * (x - cx) + (y - cy) * (y - cy) < p.R * p.R) continue;
+      var tx = -a * sp, ty = b * cp;
+      var ang = Math.atan2(tx * sr + ty * cr, tx * cr - ty * sr);
+      if (ang > Math.PI / 2) ang -= Math.PI; else if (ang < -Math.PI / 2) ang += Math.PI;
+      var ca = Math.cos(ang), sa = Math.sin(ang);
+      put(tok, front ? 0.75 : 0.3, ca, sa, -sa, ca, x, y);
+    }
+  }
+
+  function drawPlanet(p, sec, scroll) {
+    var pos = p.base - sec * p.side.speed - scroll * p.side.depth;
+    var lap = Math.floor(pos / p.span);
+    var cy = pos - lap * p.span - EDGE;                 // leaves at the top, comes back at the bottom
+    if (cy > vh + EDGE) return;
+    var pool = p.kind === "S" ? SHORT : LANGS;
+    var look = lookFor(p, pool[mod(p.seed - lap * 7, pool.length)]);   // a new language each lap
+    var cx = p.x, R = p.R, spin = p.phase + sec * p.spin;
+    var ct = Math.cos(p.tilt), st = Math.sin(p.tilt);
+    if (look.ring) drawRing(p, look, cx, cy, sec, false);
+
+    // Rows of the word wrapped round a ball: squeezed towards the edges and the poles,
+    // bright where the light hits, faint on the dark side so the whole ball still shows
+    var rows = Math.floor((R - look.lh * 0.5) / look.lh);
+    for (var k = -rows; k <= rows; k++) {
+      var yk = k * look.lh, sinT = yk / R, cosT = Math.sqrt(1 - sinT * sinT), r = R * cosT;
+      var n = Math.max(3, Math.floor((Math.PI * 2 * r) / (look.word.w + look.size * 0.6)));
+      var step = (Math.PI * 2) / n, phi0 = spin + k * 0.7;
+      for (var i = 0; i < n; i++) {
+        var phi = phi0 + i * step, c = Math.cos(phi);
+        if (c < 0.06) continue;                          // round the back
+        var s = Math.sin(phi);
+        var lam = Math.max(0, s * cosT * LX + sinT * LY + c * cosT * LZ);
+        var x = r * s, y = yk, sy = Math.max(0.35, cosT);
+        put(look.word, (0.12 + 0.68 * lam) * (0.55 + 0.45 * c),
+            c * ct, c * st, -st * sy, ct * sy,
+            cx + x * ct - y * st, cy + x * st + y * ct);
+      }
+    }
+    if (look.ring) drawRing(p, look, cx, cy, sec, true);
+  }
+
+  var running = false, clock = 0, prev = 0, last = 0;
+  function render() {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalAlpha = 1;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var moving = !still.matches;
+    var sec = moving ? clock / 1000 : 0, scroll = moving ? window.scrollY || 0 : 0;
+    for (var i = 0; i < planets.length; i++) drawPlanet(planets[i], sec, scroll);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalAlpha = 1;
+  }
+  function frame(now) {
+    if (!running) return;
+    if (now - last >= 33) {                             // about 30 frames a second
+      clock += Math.min(now - prev, 100);
+      prev = now; last = now;
+      render();
+    }
+    requestAnimationFrame(frame);
+  }
+  function start() {
+    if (running || !planets.length || still.matches || document.hidden) return;
+    running = true; prev = performance.now();
+    requestAnimationFrame(frame);
+  }
+  function stop() { running = false; }
+  function refresh() { stop(); build(); render(); start(); }
+
+  var resizeTimer = 0;
+  window.addEventListener("resize", function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(refresh, 150);
+  });
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) stop(); else start();
+  });
+  [wide, still].forEach(function (mq) {
+    if (mq.addEventListener) mq.addEventListener("change", refresh);
+  });
+  refresh();
+})();
 </script>
 
 </body>
