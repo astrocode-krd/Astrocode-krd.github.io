@@ -147,7 +147,7 @@
     height: 100%;
     pointer-events: none;
   }
-  @media (min-width: 1520px) {
+  @media (min-width: 1360px) {
     .side-planets { display: block; }
   }
 
@@ -1269,12 +1269,13 @@
 // Side planets: on wide screens, programming languages drift up the empty margins
 // as planets made of their own names ("C# C# C#..." wrapped round a ball). Each planet
 // takes a new language every time it leaves the top, so the whole list comes round.
-// Decoration only: hidden below 1520px wide, and still for people who turn off motion.
+// Decoration only: hidden below 1360px wide (or when the margins are too narrow),
+// and still for people who turn off motion.
 (function () {
   var canvas = document.getElementById("side-planets");
   if (!canvas || !canvas.getContext) return;
   var ctx = canvas.getContext("2d");
-  var wide = window.matchMedia("(min-width: 1520px)");
+  var wide = window.matchMedia("(min-width: 1360px)");
   var still = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   // Our own stack first, then the rest of the programming world. Edit freely.
@@ -1284,6 +1285,7 @@
                "F#", "Clojure", "Groovy", "Objective-C", "MATLAB", "Fortran", "COBOL", "Pascal", "Assembly", "Solidity",
                "WebAssembly", "Elm", "OCaml", "Lisp", "Prolog", "Nim", "Crystal", "Ada", "Smalltalk", "VB.NET"];
   var SHORT = LANGS.filter(function (l) { return l.length <= 4; });   // small planets need short names
+  var MID = LANGS.filter(function (l) { return l.length <= 7; });     // for narrower margins
 
   // Circuit-board colours that sit with the dark board and copper:
   // silkscreen grey, copper, trace blue, gold, bright copper, steel blue, sand
@@ -1291,9 +1293,13 @@
 
   // Planet sizes down each side: large, medium and small, as a share of the margin width
   var PATTERN = ["L", "S", "M", "S", "L", "M", "S", "M"];
-  var SIZES = { L: { lo: 0.27, hi: 0.34, min: 40, max: 120 },
-                M: { lo: 0.17, hi: 0.22, min: 32, max: 80 },
-                S: { lo: 0.08, hi: 0.12, min: 20, max: 44 } };
+  var SIZES = { L: { lo: 0.27, hi: 0.34, min: 36, max: 120 },
+                M: { lo: 0.17, hi: 0.22, min: 28, max: 80 },
+                S: { lo: 0.08, hi: 0.12, min: 18, max: 44 } };
+  // Narrower margins (under 200px, e.g. a 1920 screen at 125% scaling): fewer, bigger planets
+  var NARROW_PATTERN = ["L", "M", "L", "M", "L", "M"];
+  var NARROW_SIZES = { L: { lo: 0.38, hi: 0.44, min: 36, max: 120 },
+                       M: { lo: 0.28, hi: 0.34, min: 28, max: 80 } };
 
   var FONT = 'ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace';
   var LX = -0.55, LY = -0.5, LZ = 0.67, LM = Math.hypot(LX, LY, LZ);
@@ -1347,25 +1353,27 @@
     if (!wrap) return;
     var box = wrap.getBoundingClientRect(), cs = getComputedStyle(wrap);
     var left = box.left + parseFloat(cs.paddingLeft), right = box.right - parseFloat(cs.paddingRight);
-    var sides = [{ x0: 24, x1: left - 40, speed: 10, depth: 0.25 },
-                 { x0: right + 40, x1: vw - 24, speed: 13, depth: 0.32 }];
-    if (sides[0].x1 - sides[0].x0 < 140) return;
+    var sides = [{ x0: 16, x1: left - 32, speed: 10, depth: 0.25 },
+                 { x0: right + 32, x1: vw - 16, speed: 13, depth: 0.32 }];
+    if (sides[0].x1 - sides[0].x0 < 100) return;          // margins too narrow for planets
 
     sides.forEach(function (side, s) {
       var width = side.x1 - side.x0, y = 0, column = [], big = 0, small = 0;
-      var pattern = s === 0 ? PATTERN : PATTERN.slice(3).concat(PATTERN.slice(0, 3));
+      var narrow = width < 200;
+      var order = narrow ? NARROW_PATTERN : PATTERN;
+      var pattern = s === 0 ? order : order.slice(3).concat(order.slice(0, 3));
       pattern.forEach(function (kind, j) {
         // First time round, the big planets wear our own stack; small ones start further down the list
         var seed = kind === "S" ? 6 + 2 * small++ + s : 2 * big++ + s;
-        var sz = SIZES[kind];
+        var sz = (narrow ? NARROW_SIZES : SIZES)[kind];
         var R = Math.max(sz.min, Math.min(sz.max, width * rand(sz.lo, sz.hi)));
-        var ringed = kind === "M" && j % 2 === 0;
+        var ringed = kind === "M" && j % 2 === 0 && width >= 170;   // rings need room
         var reach = ringed ? R * 2.05 : R * 1.05;
         var lo = side.x0 + reach, hi = side.x1 - reach;
         var lean = j % 2 ? rand(0.55, 1) : rand(0, 0.45);          // zigzag across the margin
         y += R;
         column.push({
-          R: R, kind: kind, ringed: ringed, side: side, base: y,
+          R: R, kind: kind, ringed: ringed, narrow: narrow, side: side, base: y,
           x: lo < hi ? lo + (hi - lo) * lean : (side.x0 + side.x1) / 2,
           seed: seed,
           spin: rand(0.15, 0.3) * (Math.random() < 0.5 ? -1 : 1),
@@ -1412,7 +1420,7 @@
     var lap = Math.floor(pos / p.span);
     var cy = pos - lap * p.span - EDGE;                 // leaves at the top, comes back at the bottom
     if (cy > vh + EDGE) return;
-    var pool = p.kind === "S" ? SHORT : LANGS;
+    var pool = p.kind === "S" ? SHORT : p.narrow ? MID : LANGS;
     var look = lookFor(p, pool[mod(p.seed - lap * 7, pool.length)]);   // a new language each lap
     var cx = p.x, R = p.R, spin = p.phase + sec * p.spin;
     var ct = Math.cos(p.tilt), st = Math.sin(p.tilt);
